@@ -1,15 +1,15 @@
-﻿@page
+﻿@page "{userId}"
 @model DeletePersonalDataModel
 @{
-    ViewData["Title"] = "Delete Personal Data";
+    ViewData["Title"] = "Hapus Data Personal";
     ViewData["ActivePage"] = ManageNavPages.PersonalData;
 }
 
 <h4>@ViewData["Title"]</h4>
 
-<div class="alert alert-warning" role="alert">
+<div class="alert alert-danger" role="alert">
     <p>
-        <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
+      <strong>Anda akan menghapus akun user secara permanen. Klik tombol Hapus Akun jika ingin melanjutkan.</strong>
     </p>
 </div>
 
@@ -24,7 +24,7 @@
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
         }
-        <button class="btn btn-danger" type="submit">Delete data and close my account</button>
+        <button class="btn btn-outline-danger" type="submit">Hapus Akun</button>
     </form>
 </div>
 

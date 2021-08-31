@@ -1,27 +1,28 @@
-﻿@page
+﻿@page "{userId}"
+@using System.Security.Claims
 @model PersonalDataModel
 @{
-    ViewData["Title"] = "Personal Data";
-    ViewData["ActivePage"] = ManageNavPages.PersonalData;
+  ViewData["Title"] = "Data Personal";
+  ViewData["ActivePage"] = ManageNavPages.PersonalData;
 }
 
 <h4>@ViewData["Title"]</h4>
 
 <div class="row">
-    <div class="col-md-6">
-        <p>Your account contains personal data that you have given us. This page allows you to download or delete that data.</p>
-        <p>
-            <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
-        </p>
-        <form id="download-data" asp-page="DownloadPersonalData" method="post" class="form-group">
-            <button class="btn btn-primary" type="submit">Download</button>
-        </form>
-        <p>
-            <a id="delete" asp-page="DeletePersonalData" class="btn btn-secondary">Delete</a>
-        </p>
+  <div class="col-md-6">
+    <p>Halaman ini digunakan untuk mengunduh/menghapus data personal user.</p>
+    <p>
+      <strong>Klik tombol hapus untuk menghapus akun user secara permanen.</strong>
+    </p>
+    <div class="d-flex">
+      <form id="download-data" asp-page="DownloadPersonalData" asp-route-userId="@Model.UserId" method="post" class="form-group">
+        <button class="btn btn-primary" type="submit">Unduh</button>
+      </form>
+      <a id="delete" asp-page="DeletePersonalData" asp-route-userId="@Model.UserId" class="btn btn-outline-danger mx-2">Hapus</a>
     </div>
+  </div>
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+  <partial name="_ValidationScriptsPartial"/>
 }

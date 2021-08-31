@@ -38,7 +38,14 @@ namespace RegisterSPM
       services.AddDatabaseDeveloperPageExceptionFilter();
       services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-      services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+      services.AddIdentity<IdentityUser, IdentityRole>(options =>
+        {
+          options.SignIn.RequireConfirmedAccount = false;
+          options.Password.RequireDigit = false;
+          options.Password.RequireLowercase = false;
+          options.Password.RequireNonAlphanumeric = false;
+          options.Password.RequireUppercase = false;
+        })
         .AddDefaultTokenProviders()
         .AddEntityFrameworkStores<ApplicationDbContext>();
 

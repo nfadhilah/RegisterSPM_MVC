@@ -4,56 +4,75 @@
   ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
-
+<div class="mb-3">
+  <h3 class="h3 d-inline align-middle">Tambah User</h3>
+  <h5 class="badge bg-dark text-white ms-2">Form Registrasi User</h5>
+</div>
 <div class="row">
-  <div class="col-md-4">
-    <form asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data" id="formRegister" autocomplete="false">
-      <h4>Create a new account.</h4>
-      <hr/>
-      <div asp-validation-summary="All" class="text-danger"></div>
-      <div class="form-group">
-        <label asp-for="Input.Email"></label>
-        <input asp-for="Input.Email" class="form-control"/>
-        <span asp-validation-for="Input.Email" class="text-danger"></span>
+  <div class="col-12 col-lg-6">
+    <div class="card">
+      <div class="card-body">
+
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data" id="formRegister" autocomplete="false">
+          <div asp-validation-summary="All" class="text-danger"></div>
+          <div class="form-group">
+            <label asp-for="Input.Email"></label>
+            <input asp-for="Input.Email" class="form-control" />
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+          </div>
+          <div class="form-group">
+            <label asp-for="Input.Nama"></label>
+            <input asp-for="Input.Nama" class="form-control" />
+            <span asp-validation-for="Input.Nama" class="text-danger"></span>
+          </div>
+          <div class="form-group">
+            <label asp-for="Input.NIP"></label>
+            <input asp-for="Input.NIP" class="form-control" />
+            <span asp-validation-for="Input.NIP" class="text-danger"></span>
+          </div>
+          <div class="form-group">
+            <label asp-for="Input.PhoneNumber"></label>
+            <input asp-for="Input.PhoneNumber" class="form-control" />
+            <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+          </div>
+          <div class="form-group">
+            <label asp-for="Input.Jabatan"></label>
+            <input asp-for="Input.Jabatan" class="form-control" />
+            <span asp-validation-for="Input.Jabatan" class="text-danger"></span>
+          </div>
+          <div class="form-group">
+            <label>Foto</label>
+            <input type="file" id="imgUpload" asp-for="Image" class="form-control" />
+            <span asp-validation-for="Image" class="text-danger"></span>
+          </div>
+          <div class="form-group">
+            <label asp-for="Input.Password"></label>
+            <input asp-for="Input.Password" class="form-control" />
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+          </div>
+          <div class="form-group">
+            <label asp-for="Input.ConfirmPassword"></label>
+            <input asp-for="Input.ConfirmPassword" class="form-control" />
+            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+          </div>
+          <div class="form-group">
+            <label asp-for="Input.Role"></label>
+            @Html.DropDownListFor(x => x.Input.Role, Model.Input.RoleList, "Pilih role", new { @class = "form-control" })
+            <span asp-validation-for="Input.Role" class="text-danger"></span>
+          </div>
+          <div class="my-2">
+            <div class="row">
+              <div class="col">
+                <a asp-page-handler="Cancel" asp-route-returnUrl="@Model.ReturnUrl" class="btn btn-outline-danger form-control">Batal</a>
+              </div>
+              <div class="col">
+                <button type="submit" class="btn btn-primary form-control">Submit</button>
+              </div>
+            </div>
+          </div>
+        </form>
       </div>
-      <div class="form-group">
-        <label asp-for="Input.Nama"></label>
-        <input asp-for="Input.Nama" class="form-control"/>
-        <span asp-validation-for="Input.Nama" class="text-danger"></span>
-      </div>
-      <div class="form-group">
-        <label asp-for="Input.NIP"></label>
-        <input asp-for="Input.NIP" class="form-control"/>
-        <span asp-validation-for="Input.NIP" class="text-danger"></span>
-      </div>
-      <div class="form-group">
-        <label asp-for="Input.Jabatan"></label>
-        <input asp-for="Input.Jabatan" class="form-control"/>
-        <span asp-validation-for="Input.Jabatan" class="text-danger"></span>
-      </div>
-      <div class="form-group">
-        <label>Foto</label>
-        <input type="file" id="imgUpload" asp-for="Image" class="form-control" />
-        <span asp-validation-for="Image" class="text-danger"></span>
-      </div>
-      <div class="form-group">
-        <label asp-for="Input.Password"></label>
-        <input asp-for="Input.Password" class="form-control"/>
-        <span asp-validation-for="Input.Password" class="text-danger"></span>
-      </div>
-      <div class="form-group">
-        <label asp-for="Input.ConfirmPassword"></label>
-        <input asp-for="Input.ConfirmPassword" class="form-control"/>
-        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-      </div>
-      <div class="form-group">
-        <label asp-for="Input.Role"></label>
-        @Html.DropDownListFor(x => x.Input.Role, Model.Input.RoleList, "Pilih role", new {@class = "form-control"})
-        <span asp-validation-for="Input.Role" class="text-danger"></span>
-      </div>
-      <button type="submit" class="btn btn-primary">Register</button>
-    </form>
+    </div>
   </div>
   @*<div class="col-md-6 col-md-offset-2">
     <section>

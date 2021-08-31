@@ -1,30 +1,68 @@
-﻿@page
+﻿@page "{userId}"
+@using RegisterSPM.Utility
 @model IndexModel
 @{
-    ViewData["Title"] = "Profile";
-    ViewData["ActivePage"] = ManageNavPages.Index;
+  ViewData["Title"] = "Profile";
+  ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
 <h4>@ViewData["Title"]</h4>
-<partial name="_StatusMessage" model="Model.StatusMessage" />
 <div class="row">
-    <div class="col-md-6">
-        <form id="profile-form" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Username"></label>
-                <input asp-for="Username" class="form-control" disabled />
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.PhoneNumber"></label>
-                <input asp-for="Input.PhoneNumber" class="form-control" />
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-            </div>
-            <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
-        </form>
-    </div>
+  <div class="col-md-6">
+    <partial name="_StatusMessage" model="Model.StatusMessage"/>
+    <form id="profile-form" method="post" enctype="multipart/form-data" autocomplete="false">
+      <div asp-validation-summary="All" class="text-danger"></div>
+      <div class="form-group my-2">
+        <label asp-for="Username"></label>
+        <input asp-for="Username" class="form-control" disabled />
+      </div>
+      <div class="form-group my-2">
+        <label asp-for="Input.Nama"></label>
+        <input asp-for="Input.Nama" class="form-control" />
+        <span asp-validation-for="Input.Nama" class="text-danger"></span>
+      </div>
+      <div class="form-group my-2">
+        <label asp-for="Input.NIP"></label>
+        <input asp-for="Input.NIP" class="form-control" />
+        <span asp-validation-for="Input.NIP" class="text-danger"></span>
+      </div>
+      <div class="form-group my-2">
+        <label asp-for="Input.PhoneNumber"></label>
+        <input asp-for="Input.PhoneNumber" class="form-control" />
+        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+      </div>
+      <div class="form-group my-2">
+        <label asp-for="Input.Jabatan"></label>
+        <input asp-for="Input.Jabatan" class="form-control" />
+        <span asp-validation-for="Input.Jabatan" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+        <label>Foto</label>
+        <input type="file" id="imgUpload" asp-for="Image" class="form-control" />
+        <span asp-validation-for="Image" class="text-danger"></span>
+      </div>
+      @*<div class="form-group">
+      <label>Foto</label>
+      <input type="file" id="imgUpload" asp-for="Image" class="form-control"/>
+      <span asp-validation-for="Image" class="text-danger"></span>
+    </div>*@
+      @if (User.IsInRole(SD.RoleSA) || User.IsInRole(SD.RoleAdmin))
+      {
+        <div class="form-group my-2">
+          <label asp-for="Input.Role"></label>
+          @Html.DropDownListFor(x => x.Input.Role, Model.Input.RoleList, "Pilih role", new { @class = "form-control" })
+          <span asp-validation-for="Input.Role" class="text-danger"></span>
+        </div>
+      }
+      else
+      {
+        <input type="hidden" asp-for="Input.Role" value="@Model.Input.Role"/> 
+      }
+      <button id="update-profile-button" type="submit" class="btn btn-primary my-2">Submit</button>
+    </form>
+  </div>
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+  <partial name="_ValidationScriptsPartial"/>
 }

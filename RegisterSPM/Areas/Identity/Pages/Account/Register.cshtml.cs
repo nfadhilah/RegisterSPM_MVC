@@ -21,10 +21,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RegisterSPM.DataAccess.IRepository;
 using RegisterSPM.Models;
+using RegisterSPM.Utility;
 
 namespace RegisterSPM.Areas.Identity.Pages.Account
 {
-  [AllowAnonymous]
+  [Authorize(Roles = SD.RoleSA + "," + SD.RoleAdmin)]
   public class RegisterModel : PageModel
   {
     private readonly SignInManager<IdentityUser> _signInManager;
@@ -54,7 +55,7 @@ namespace RegisterSPM.Areas.Identity.Pages.Account
     public InputModel Input { get; set; }
 
     [BindProperty]
-    [Required]
+    // [Required]
     public IFormFile Image { get; set; }
 
     public string ReturnUrl { get; set; }
@@ -69,18 +70,20 @@ namespace RegisterSPM.Areas.Identity.Pages.Account
       public string Email { get; set; }
 
       [Required]
-      [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
+      [StringLength(100, ErrorMessage = "Panjang {0} minimal {2} dan max {1} karakter.",
         MinimumLength = 6)]
       [DataType(DataType.Password)]
       [Display(Name = "Password")]
       public string Password { get; set; }
 
       [DataType(DataType.Password)]
-      [Display(Name = "Confirm password")]
-      [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+      [Display(Name = "Konfirmasi Password")]
+      [Compare("Password", ErrorMessage = "Password dan Konfirmasi Password Tidak Sama.")]
       public string ConfirmPassword { get; set; }
 
       public string NIP { get; set; }
+      [Display(Name = "No. Telepon")]
+      public string PhoneNumber { get; set; }
 
       [Required]
       public string Nama { get; set; }
@@ -132,10 +135,11 @@ namespace RegisterSPM.Areas.Identity.Pages.Account
           NIP = Input.NIP, 
           Nama = Input.Nama, 
           Jabatan = Input.Jabatan,
-          Role = Input.Role
+          Role = Input.Role,
+          PhoneNumber = Input.PhoneNumber
         };
 
-        if (Image.Length > 0)
+        if (Image is {Length: > 0})
         {
           var fileName = Guid.NewGuid().ToString() + Path.GetExtension(Image.FileName);
           var file = Path.Combine(_hostEnvironment.WebRootPath, "img", "avatars", fileName);
@@ -166,11 +170,9 @@ namespace RegisterSPM.Areas.Identity.Pages.Account
           {
             return RedirectToPage("RegisterConfirmation", new {email = Input.Email, returnUrl = returnUrl});
           }
-          else
-          {
-            await _signInManager.SignInAsync(user, isPersistent: false);
-            return LocalRedirect(returnUrl);
-          }
+
+          // await _signInManager.SignInAsync(user, false);
+          return LocalRedirect(returnUrl);
         }
 
         foreach (var error in result.Errors)
@@ -190,6 +192,23 @@ namespace RegisterSPM.Areas.Identity.Pages.Account
 
       // If we got this far, something failed, redisplay form
       return Page();
+    }
+
+    public IActionResult OnGetCancel(string returnUrl = null)
+    {
+      if (string.IsNullOrWhiteSpace(returnUrl))
+      {
+        Input = new InputModel
+        {
+          RoleList = _roleManager.Roles.Select(x => new SelectListItem
+          {
+            Value = x.Name,
+            Text = x.Name,
+          })
+        };
+        return Page();
+      };
+      return Redirect(returnUrl);
     }
   }
 }
