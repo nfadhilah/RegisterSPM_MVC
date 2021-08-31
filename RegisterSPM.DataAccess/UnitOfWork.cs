@@ -15,6 +15,8 @@ namespace RegisterSPM.DataAccess
     public IStoreProcedureCall SpCall => new StoreProcedureCall(_db);
     public ITahunRepository Tahun => new TahunRepository(_db);
     public IChecklistRepository Checklist => new ChecklistRepository(_db);
+    public IApplicationUserRepository ApplicationUser => new ApplicationUserRepository(_db);
+
     public void Dispose()
     {
       _db.Dispose();

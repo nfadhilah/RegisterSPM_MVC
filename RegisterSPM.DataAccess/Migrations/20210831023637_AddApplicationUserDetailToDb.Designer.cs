@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RegisterSPM.DataAccess.Data;
 
 namespace RegisterSPM.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210831023637_AddApplicationUserDetailToDb")]
+    partial class AddApplicationUserDetailToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,36 +50,36 @@ namespace RegisterSPM.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ae4274e4-f654-4908-b040-0873f6973581",
-                            ConcurrencyStamp = "28dda1a8-29b7-42e4-b894-e7e3bebe257a",
+                            Id = "91e51fa2-0857-4bb6-95eb-fcbd03e7ecf0",
+                            ConcurrencyStamp = "11d8156c-d318-45d2-a232-20170dda0694",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "0570e223-4c6e-432e-ab0c-7e38a2864567",
-                            ConcurrencyStamp = "606fea19-c593-415d-b6ad-8e67877a5a23",
+                            Id = "d5039926-93c0-46ce-b71c-042d182f25db",
+                            ConcurrencyStamp = "8844d5b1-dd2d-4e99-8c24-6cb46f7054c3",
                             Name = "SA",
                             NormalizedName = "SA"
                         },
                         new
                         {
-                            Id = "87da8d3a-1c2b-4bea-b05d-2f609e4a1c46",
-                            ConcurrencyStamp = "9ded930b-d056-4249-ac1e-5d77a404e794",
+                            Id = "6b924686-b4f4-4b13-a42c-26ffed581104",
+                            ConcurrencyStamp = "21e9fa29-5a25-435b-b47e-0bed1f8e93f3",
                             Name = "Registrator",
                             NormalizedName = "REGISTRATOR"
                         },
                         new
                         {
-                            Id = "3cf1d52c-8c2a-46c6-b7d7-c9968867e3a3",
-                            ConcurrencyStamp = "a2ef868a-29c9-4a80-bd7d-35865305e1c2",
+                            Id = "1b6f4c7b-3073-4a17-938c-bfebb908a1b0",
+                            ConcurrencyStamp = "efa64fa7-be1e-4c49-99e5-23be19f5b5db",
                             Name = "Verifikator",
                             NormalizedName = "VERIFIKATOR"
                         },
                         new
                         {
-                            Id = "0cdc8477-dfe3-496a-abdc-53cdd0fb5a64",
-                            ConcurrencyStamp = "a8ad9284-b6d8-4850-ad89-36fd2979c637",
+                            Id = "5f8695dd-b24e-4565-9dcd-85a9eff77cce",
+                            ConcurrencyStamp = "4e45aa2b-253f-40d3-9ad6-091b4aa33b63",
                             Name = "Approver",
                             NormalizedName = "APPROVER"
                         });
@@ -441,9 +443,6 @@ namespace RegisterSPM.DataAccess.Migrations
 
                     b.Property<string>("Nama")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");

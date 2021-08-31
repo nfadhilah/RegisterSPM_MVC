@@ -7,6 +7,7 @@ namespace RegisterSPM.DataAccess.IRepository
     IStoreProcedureCall SpCall { get; }
     ITahunRepository Tahun { get; }
     IChecklistRepository Checklist { get; }
+    IApplicationUserRepository ApplicationUser { get; }
     void Save();
   }
 }
