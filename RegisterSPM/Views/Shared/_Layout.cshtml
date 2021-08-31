@@ -1,11 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Http
 @using RegisterSPM.Utility
 @using System.Security.Claims
-@inject IHttpContextAccessor _httpContext
+@using RegisterSPM.ViewComponents
 
-@{
-  var tahun = _httpContext.HttpContext?.Session.GetObject<string>(SD.SsTahun);
-}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -33,78 +30,7 @@
         <a class="sidebar-brand" href="index.html">
           <span class="align-middle">REGISTRASI SPM</span>
         </a>
-
-        <ul class="sidebar-nav">
-          <li class="sidebar-header">
-            <span class="text-info">TAHUN ANGGARAN @tahun</span>
-          </li>
-          <li class="sidebar-header">
-            APP
-          </li>
-
-          <li id="Home" class="sidebar-item">
-            <a class="sidebar-link" asp-area="Main" asp-controller="Home" asp-action="Index">
-              <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
-            </a>
-          </li>
-
-          <li id="Privacy" class="sidebar-item">
-            <a class="sidebar-link" asp-area="Main" asp-controller="Home" asp-action="Privacy">
-              <i class="align-middle" data-feather="book"></i> <span class="align-middle">Manajemen SPM</span>
-            </a>
-          </li>
-
-          <li class="sidebar-header">
-            REPORT
-          </li>
-
-          <li id="RptFormPersetujuan" class="sidebar-item">
-            <a class="sidebar-link" asp-area="" asp-controller="Home" asp-action="Privacy">
-              <i class="align-middle" data-feather="book-open"></i> <span class="align-middle">Form Persetujuan</span>
-            </a>
-          </li>
-
-          <li id="RptRegisterSPM" class="sidebar-item">
-            <a class="sidebar-link" asp-area="" asp-controller="Home" asp-action="Privacy">
-              <i class="align-middle" data-feather="book-open"></i> <span class="align-middle">Register SPM</span>
-            </a>
-          </li>
-
-          @if (User.IsInRole(SD.RoleSA) || User.IsInRole(SD.RoleAdmin))
-          {
-            <li class="sidebar-header">
-              OTORISASI/OTENTIKASI
-            </li>
-
-            <li id="Role" class="sidebar-item">
-              <a class="sidebar-link" asp-area="Admin" asp-controller="Role" asp-action="Index">
-                <i class="align-middle" data-feather="user"></i> <span class="align-middle">Role</span>
-              </a>
-            </li>
-
-            <li id="User" class="sidebar-item">
-              <a class="sidebar-link" asp-area="Admin" asp-controller="Role" asp-action="Privacy">
-                <i class="align-middle" data-feather="users"></i> <span class="align-middle">User</span>
-              </a>
-            </li>
-
-            <li class="sidebar-header">
-              PENGATURAN
-            </li>
-
-            <li id="Tahun" class="sidebar-item">
-              <a class="sidebar-link" asp-area="Admin" asp-controller="Tahun" asp-action="Index">
-                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Tahun</span>
-              </a>
-            </li>
-            <li id="Checklist" class="sidebar-item">
-              <a class="sidebar-link" asp-area="Admin" asp-controller="Checklist" asp-action="Index">
-                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Checklist</span>
-              </a>
-            </li>
-          }
-
-        </ul>
+        @(await Component.InvokeAsync<SidebarNavMenuViewComponent>())
       </div>
     </nav>
 
@@ -235,7 +161,7 @@
         </div>
       </main>
 
-      <footer class="footer">
+      @*<footer class="footer">
         <div class="container-fluid">
           <div class="row text-muted">
             <div class="col-6 text-start">
@@ -263,7 +189,7 @@
             </div>
           </div>
         </div>
-      </footer>
+      </footer>*@
     </div>
   </div>
 
