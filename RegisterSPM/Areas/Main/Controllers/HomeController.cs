@@ -1,15 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RegisterSPM.Models;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 
-namespace RegisterSPM.Controllers
+namespace RegisterSPM.Areas.Main.Controllers
 {
+  [Area("Main")]
   [Authorize]
   public class HomeController : Controller
   {

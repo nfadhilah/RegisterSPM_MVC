@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Checklist>
+@{
+  ViewData["Active"] = "Checklist";
+}
+
+
+<div class="mb-3">
+  <h3 class="h3 d-inline align-middle">@ViewData["Active"].ToString()</h3>
+  <h5 class="badge bg-dark text-white ms-2">Daftar Checklist Kelengkapan Dokumen</h5>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="d-flex flex-row">
+      <div class="justify-content-end">
+        <a class="btn btn-primary" asp-area="Admin" asp-controller="Checklist" asp-action="Upsert"><i class="align-middle" data-feather="plus"></i> <span class="align-middle">Tambah</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12">
+        <table id="tblData" class="display" width="100%">
+          <thead>
+            <tr>
+              <th>No. Urut</th>
+              <th>Uraian</th>
+              <th class="text-center">Action</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+  <script src="~/js/checklist.js"></script>
+}

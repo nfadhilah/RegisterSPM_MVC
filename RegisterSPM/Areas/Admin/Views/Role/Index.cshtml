@@ -1,0 +1,35 @@
+﻿@using RegisterSPM.Utility
+@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityRole>
+@{
+  ViewData["Active"] = "Role";
+}
+
+
+<div class="mb-3">
+  <h3 class="h3 d-inline align-middle">@ViewData["Active"].ToString()</h3>
+  <h5 class="badge bg-dark text-white ms-2">Daftar Role App</h5>
+</div>
+<div class="card">
+  <div class="card-header">
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12">
+        <table id="tblData" class="display" width="100%">
+          <thead>
+          <tr>
+            <th>Id</th>
+            <th>Role</th>
+            <th>Normalized Name</th>
+            <th>Concurrency Stamp</th>
+          </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+  <script src="~/js/role.js"></script>
+}

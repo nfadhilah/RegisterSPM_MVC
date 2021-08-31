@@ -1,0 +1,39 @@
+﻿@model Checklist
+@{
+  var title = Model.Id == 0 ? "Tambah" : "Edit";
+}
+
+<div class="mb-3">
+  <h3 class="h3 d-inline align-middle">@title</h3>
+  <h5 class="badge bg-dark text-white ms-2">Form @title Checklist Kelengkapan Dokumen</h5>
+</div>
+<div class="row">
+  <div class="col-12 col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <form method="post">
+          <div asp-validation-summary="All"></div>
+          <input type="hidden" asp-for="Id" />
+          <div class="form-group my-2">
+            <label asp-for="SeqNo"></label>
+            <input type="text" asp-for="SeqNo" class="form-control"/>
+            <span asp-validation-for="SeqNo" class="text-danger"></span>
+          </div>
+          <div class="form-group my-2">
+            <label asp-for="Uraian"></label>
+            <textarea asp-for="Uraian" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="Uraian" class="text-danger"></span>
+          </div>
+          <div class="my-2">
+            <partial name="_ButtonFormPartial"/>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts
+{
+  <partial name="_ValidationScriptsPartial"/>
+}

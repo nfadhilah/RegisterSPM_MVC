@@ -44,6 +44,43 @@ namespace RegisterSPM.DataAccess.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "803f9e3f-9a91-4ba6-824a-46daf6a0d3e1",
+                            ConcurrencyStamp = "5d436174-f112-47bc-aa1c-d3e571a14223",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "9441d2b2-7cac-4ad5-9dd4-9a6e0ef0a618",
+                            ConcurrencyStamp = "d40f4b47-e747-4df8-b495-583f085547df",
+                            Name = "SA",
+                            NormalizedName = "SA"
+                        },
+                        new
+                        {
+                            Id = "9bb30555-24f3-4934-9d6a-108b9da70bfa",
+                            ConcurrencyStamp = "a5fb75b4-b25f-4913-a717-9100125ff24e",
+                            Name = "Registrator",
+                            NormalizedName = "REGISTRATOR"
+                        },
+                        new
+                        {
+                            Id = "408611c6-1206-466d-a57b-eda73e644cc6",
+                            ConcurrencyStamp = "c9240699-bd56-47c5-a624-b2bfdb5f2d74",
+                            Name = "Verifikator",
+                            NormalizedName = "VERIFIKATOR"
+                        },
+                        new
+                        {
+                            Id = "31b84946-1a90-4052-9432-c6296fd78219",
+                            ConcurrencyStamp = "e5068b06-6646-42ab-ada0-7b2fedf3f944",
+                            Name = "Approver",
+                            NormalizedName = "APPROVER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -162,12 +199,10 @@ namespace RegisterSPM.DataAccess.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -204,12 +239,10 @@ namespace RegisterSPM.DataAccess.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -217,6 +250,174 @@ namespace RegisterSPM.DataAccess.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("RegisterSPM.Models.Checklist", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("SeqNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Uraian")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Checklist");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            SeqNo = "00001",
+                            Uraian = "Penelitian Kelengkapan Dokumen SPP - UP/GU/TU/LS (Cheklist)"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            SeqNo = "00002",
+                            Uraian = "Surat Pengantar SPP - UP/GU/TU/LS"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            SeqNo = "00003",
+                            Uraian = "Ringkasan SPP - UP/GU/TU/LS "
+                        },
+                        new
+                        {
+                            Id = 4,
+                            SeqNo = "00004",
+                            Uraian = "Rincian SPP - UP/GU/TU/LS"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            SeqNo = "00005",
+                            Uraian = "Surat Perintah Membayar (SPM)"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            SeqNo = "00006",
+                            Uraian = "Kuitansi Dinas"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            SeqNo = "00007",
+                            Uraian = "Surat Pernyataan Pengajuan SPP -UP/GU/TU/LS"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            SeqNo = "00008",
+                            Uraian = "Surat Pernyataan Tanggung jawab yang ditandatangani oleh PA/KPA"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            SeqNo = "00009",
+                            Uraian = "Faktur Pajak/SSP"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            SeqNo = "00010",
+                            Uraian = "Salinan SPD"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            SeqNo = "00011",
+                            Uraian = "Foto Copy Buku Rekening Bank / Referensi Bank"
+                        });
+                });
+
+            modelBuilder.Entity("RegisterSPM.Models.SPM", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ApprovedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApprovedDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DocStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Keperluan")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NoSPM")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("OPD")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("TglSPM")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("VerifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VerifiedDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OPD", "NoSPM")
+                        .IsUnique()
+                        .HasFilter("[OPD] IS NOT NULL AND [NoSPM] IS NOT NULL");
+
+                    b.ToTable("SPM");
+                });
+
+            modelBuilder.Entity("RegisterSPM.Models.Tahun", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Label")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SeqNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SeqNo", "Label")
+                        .IsUnique();
+
+                    b.ToTable("Tahun");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Label = "2021",
+                            SeqNo = "00001"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
