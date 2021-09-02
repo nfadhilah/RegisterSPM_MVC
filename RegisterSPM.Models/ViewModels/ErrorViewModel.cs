@@ -1,6 +1,4 @@
-using System;
-
-namespace RegisterSPM.Models
+namespace RegisterSPM.Models.ViewModels
 {
   public class ErrorViewModel
   {

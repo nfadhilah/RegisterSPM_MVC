@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegisterSPM", "RegisterSPM\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegisterSPM.DataAccess", "RegisterSPM.DataAccess\RegisterSPM.DataAccess.csproj", "{A166F170-94EB-40ED-8F2B-E9FF66CD651A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegisterSPM.Models", "RegisterSPM.Models\RegisterSPM.Models.csproj", "{ECDC29C4-FBDB-4BFB-92D2-044279589D6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegisterSPM.Models", "RegisterSPM.Models\RegisterSPM.Models.csproj", "{ECDC29C4-FBDB-4BFB-92D2-044279589D6D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegisterSPM.Utility", "RegisterSPM.Utility\RegisterSPM.Utility.csproj", "{320D2BEC-6249-42C2-A660-90DA10865670}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegisterSPM.Utility", "RegisterSPM.Utility\RegisterSPM.Utility.csproj", "{320D2BEC-6249-42C2-A660-90DA10865670}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

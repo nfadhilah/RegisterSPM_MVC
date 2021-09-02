@@ -13,18 +13,11 @@ namespace RegisterSPM.DataAccess
 {
   public class StoreProcedureCall : IStoreProcedureCall
   {
-    private readonly ApplicationDbContext _db;
     private static string _connectionString = "";
 
-    public StoreProcedureCall(ApplicationDbContext db)
+    public StoreProcedureCall(string connectionString) 
     {
-      _db = db;
-      _connectionString = db.Database.GetConnectionString();
-    }
-
-    public void Dispose()
-    {
-      _db.Dispose();
+      _connectionString = connectionString;
     }
 
     public T Single<T>(string procedureName, DynamicParameters param = null)

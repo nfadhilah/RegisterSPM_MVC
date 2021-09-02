@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RegisterSPM.Models;
+using RegisterSPM.Models.ViewModels;
 
 namespace RegisterSPM.Areas.Main.Controllers
 {

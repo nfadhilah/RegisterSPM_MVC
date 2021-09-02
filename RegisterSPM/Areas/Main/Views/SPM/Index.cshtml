@@ -1,0 +1,104 @@
+﻿@using RegisterSPM.Utility
+@{
+  ViewData["Active"] = "SPM";
+}
+
+
+<div class="mb-3">
+  <h3 class="h3 d-inline align-middle">Manajamen SPM</h3>
+  <h5 class="badge bg-dark text-white ms-2">Manajemen Dokumen SPM (Registrasi/Verifikasi/Persetujuan)</h5>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-6 mb-2">
+        <a class="btn btn-primary" asp-area="Main" asp-controller="SPM" asp-action="LookUp">
+          <i class="align-middle" data-feather="plus"></i> <span class="align-middle">Tambah</span>
+        </a>
+      </div>
+      <div class="col-md-6 text-sm-end">
+        <div class="btn-group btn-group-sm" role="group" aria-label="Basic radio toggle button group">
+          <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+          <label class="btn btn-outline-secondary" for="btnradio1">All</label>
+
+          <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+          <label class="btn btn-outline-secondary" for="btnradio2">Registrasi</label>
+
+          <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+          <label class="btn btn-outline-secondary" for="btnradio3">Verifikasi</label>
+
+          <input type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off">
+          <label class="btn btn-outline-secondary" for="btnradio4">Disetujui</label>
+        </div>
+      </div>
+      @*<button type="button" class="btn btn-primary" onclick="showModal()">
+              Launch demo modal
+            </button>*@
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12">
+        <table id="tblData" class="display" width="100%">
+          <thead>
+          <tr>
+            <th>OPD</th>
+            <th>No. SPM</th>
+            <th>Tgl Pengajuan</th>
+            <th>Keperluan</th>
+            <th class="text-center"></th>
+          </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+  <script src="~/js/spm.js"></script>
+  <script>
+
+
+    var appModal = $("#app-modal");
+    modal = new bootstrap.Modal(appModal);
+
+    function showModal() {
+      $.ajax({
+        url: "/Main/SPM/GetForm",
+        success: function(res) {
+          $(".modal-title").html("Test");
+          $(".modal-body").html(res);
+          $("#btnModalSubmit").attr("form", "spm-form")
+          modal.show();
+        }
+      });
+    }
+
+    function handleFormSubmit(form) {
+      $.ajax({
+        type: "POST",
+        url: form.action,
+        data: new FormData(form),
+        contentType: false,
+        processData: false,
+        success: function(res) {
+          if (!res.isValid) {
+            $(".modal-body").html(res.html);
+          } else {
+            modal.hide();
+            return true;
+          }
+        },
+        error: function(res) {
+          console.log(res);
+        }
+      });
+      return false;
+    }
+
+    function onCancel() {
+      modal.hide();
+    }
+  </script>
+}

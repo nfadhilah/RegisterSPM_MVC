@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using RegisterSPM.DataAccess;
 using RegisterSPM.DataAccess.Data;
 using RegisterSPM.DataAccess.IRepository;
@@ -60,10 +61,18 @@ namespace RegisterSPM
 
       services.AddRazorPages();
 
-      services.AddControllersWithViews(config =>
+      services.AddScoped<IStoreProcedureCall>(provider =>
       {
-        config.Filters.Add(new SessionExpirationFilter());
+        var context = provider.GetService<IHttpContextAccessor>()?.HttpContext;
+        var year = context?.Session.GetObject<string>(SD.SsTahun);
+        var host = Configuration.GetConnectionString("SIPKDConnection");
+
+        return int.TryParse(year, out var dbYear)
+          ? new StoreProcedureCall(Configuration.SetDbYear(host, dbYear))
+          : new StoreProcedureCall(host);
       });
+
+      services.AddControllersWithViews(config => { config.Filters.Add(new SessionExpirationFilter()); });
       services.AddSession(options =>
       {
         options.IdleTimeout = TimeSpan.FromMinutes(30);

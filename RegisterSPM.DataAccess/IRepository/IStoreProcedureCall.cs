@@ -4,7 +4,7 @@ using Dapper;
 
 namespace RegisterSPM.DataAccess.IRepository
 {
-    public interface IStoreProcedureCall : IDisposable
+    public interface IStoreProcedureCall
     {
       T Single<T>(string procedureName, DynamicParameters param = null);
       void Execute(string procedureName, DynamicParameters param = null);

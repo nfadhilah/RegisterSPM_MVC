@@ -1,0 +1,51 @@
+﻿@model SPM
+
+@{
+  var title = "Registrasi SPM";
+  ViewData["Active"] = "SPM";
+}
+
+<div class="mb-3">
+  <h3 class="h3 d-inline align-middle">@title</h3>
+  <h5 class="badge bg-dark text-white ms-2">Form @title</h5>
+</div>
+<div class="row">
+  <div class="col-12 col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <form method="post">
+          <div asp-validation-summary="All"></div>
+          <input type="hidden" asp-for="Id" />
+          <div class="form-group my-2">
+            <label asp-for="OPD"></label>
+            <input type="text" asp-for="OPD" class="form-control" readonly/>
+            <span asp-validation-for="OPD" class="text-danger"></span>
+          </div>
+          <div class="form-group my-2">
+            <label asp-for="NoSPM"></label>
+            <input type="text" asp-for="NoSPM" class="form-control" readonly/>
+            <span asp-validation-for="NoSPM" class="text-danger"></span>
+          </div>
+          <div class="form-group my-2">
+            <label asp-for="TglSPM"></label>
+            <input type="text" asp-for="TglSPM" class="form-control" readonly/>
+            <span asp-validation-for="TglSPM" class="text-danger"></span>
+          </div>
+          <div class="form-group my-2">
+            <label asp-for="Keperluan"></label>
+            <textarea asp-for="Keperluan" class="form-control" rows="3" readonly></textarea>
+            <span asp-validation-for="Keperluan" class="text-danger"></span>
+          </div>
+          <div class="my-2">
+            <partial name="_ButtonFormPartial" />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts
+{
+  <partial name="_ValidationScriptsPartial" />
+}

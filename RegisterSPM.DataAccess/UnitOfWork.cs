@@ -1,4 +1,5 @@
-﻿using RegisterSPM.DataAccess.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using RegisterSPM.DataAccess.Data;
 using RegisterSPM.DataAccess.IRepository;
 
 namespace RegisterSPM.DataAccess
@@ -12,10 +13,10 @@ namespace RegisterSPM.DataAccess
       _db = db;
     }
 
-    public IStoreProcedureCall SpCall => new StoreProcedureCall(_db);
     public ITahunRepository Tahun => new TahunRepository(_db);
     public IChecklistRepository Checklist => new ChecklistRepository(_db);
     public IApplicationUserRepository ApplicationUser => new ApplicationUserRepository(_db);
+    public ISPMRepository SPM => new SPMRepository(_db);
 
     public void Dispose()
     {
