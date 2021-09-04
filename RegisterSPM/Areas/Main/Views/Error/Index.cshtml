@@ -1,0 +1,15 @@
+﻿@model int?
+@{
+  Layout = "_FullLayout";
+  ViewData["Title"] = "Error";
+}
+
+@switch (Model)
+{
+  case 404:
+    <partial name="_404Partial"/>
+    break;
+  default:
+    <partial name="_500Partial"/>
+    break;
+}

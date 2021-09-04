@@ -96,6 +96,7 @@ namespace RegisterSPM
         app.UseHsts();
       }
 
+      app.UseStatusCodePagesWithRedirects("/Main/Error?code={0}");
       app.UseHttpsRedirection();
       app.UseStaticFiles();
       app.UseRouting();

@@ -35,7 +35,8 @@ namespace RegisterSPM.Areas.Main.Controllers
     [HttpGet]
     public IActionResult Index()
     {
-      return View();
+
+      return BadRequest();
     }
 
     public IActionResult LookUp()
