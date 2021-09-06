@@ -1,14 +1,24 @@
 ﻿var dataTable;
 
 $(document).ready(function() {
-  loadDataTable();
+  var query = "";
+  var params = (new URL(document.location)).searchParams;
+  var status = params.get("status");
+  var url = '/Main/SPM/GetAll' + `?status=${status}`;
+  loadDataTable(url);
 });
 
-function loadDataTable() {
+function getSelectedStatus() {
+  event.stopPropagation();
+  var selectedStatus = $('input[name="btnradio"]');
+  console.log(selectedStatus);
+}
+
+function loadDataTable(url) {
   dataTable = $('#tblData').DataTable({
     responsive: true,
     ajax: {
-      url: '/Main/SPM/GetAll',
+      url: url,
       dataSrc: ''
     },
     columns: [
@@ -22,19 +32,43 @@ function loadDataTable() {
       },
       { data: 'keperluan' },
       {
-        data: 'id',
-        render: function(data) {
+        data: null,
+        render: function (data, type, row) {
+          if (canVerify && row.docStatus !== 3) {
+            return `
+                <div>
+                  <a href="/Main/SPM/Detail/${row.id}" class="btn btn-warning" style="cursor: pointer">
+                    <i data-feather="eye"></i>
+                  </a>
+                  &nbsp;
+                  <a href="/Main/SPM/Verify/${row.id}" class="btn btn-success" style="cursor: pointer">
+                    <i data-feather="edit"></i>
+                  </a>
+                </div>
+                `;
+          }
+
+          if (canApprove && row.docStatus === 2) {
+            return `
+                <div>
+                  <a href="/Main/SPM/Detail/${row.id}" class="btn btn-warning" style="cursor: pointer">
+                    <i data-feather="eye"></i>
+                  </a>
+                  &nbsp;
+                  <a href="/Main/SPM/Approve/${row.id}" class="btn btn-danger" style="cursor: pointer">
+                    <i data-feather="edit"></i>
+                  </a>
+                </div>
+                `;
+          }
+
           return `
-            <div class="text-center">
-              <a href="/Main/SPM/Upsert/${data}" class="btn btn-success" style="cursor: pointer">
-                <i data-feather="edit"></i>
-              </a>
-              &nbsp;
-              <a onclick=onDelete("/Main/SPM/Delete/${data}") class="btn btn-danger" style="cursor: pointer">
-                <i data-feather="delete"></i>
-              </a>
-            </div>
-            `;
+                <div>
+                  <a href="/Main/SPM/Detail/${row.id}" class="btn btn-warning" style="cursor: pointer">
+                    <i data-feather="eye"></i>
+                  </a>
+                </div>
+                `;
         },
         width: '20%'
       }

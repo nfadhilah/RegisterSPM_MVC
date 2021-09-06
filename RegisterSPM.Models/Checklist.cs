@@ -18,5 +18,7 @@ namespace RegisterSPM.Models
       [Required]
 
       public string Uraian { get; set; }
+
+      public ICollection<ChecklistSPM> ListChecklistSPM { get; set; }
     }
 }

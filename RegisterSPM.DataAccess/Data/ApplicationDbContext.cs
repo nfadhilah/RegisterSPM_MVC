@@ -15,6 +15,7 @@ namespace RegisterSPM.DataAccess.Data
     public DbSet<Tahun> Tahun { get; set; }
     public DbSet<Checklist> Checklist { get; set; }
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+    public DbSet<ChecklistSPM> ChecklistSPM { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -23,7 +24,20 @@ namespace RegisterSPM.DataAccess.Data
         .HasIndex(x => new { x.SeqNo, x.Label }).IsUnique();
 
       builder.Entity<SPM>()
-        .HasIndex(x => new {x.OPD, x.NoSPM}).IsUnique();
+        .HasIndex(x => new {x.OPD, x.NoSPM, x.UnitKey}).IsUnique();
+
+      builder.Entity<ChecklistSPM>(e =>
+      {
+        e.HasKey(x => new {x.ChecklistId, x.SPMId});
+
+        e.HasOne(x => x.SPM)
+          .WithMany(x => x.ListChecklistSPM)
+          .HasForeignKey(x => x.SPMId);
+
+        e.HasOne(x => x.Checklist)
+          .WithMany(x => x.ListChecklistSPM)
+          .HasForeignKey(x => x.ChecklistId);
+      });
 
       builder.SeedRole();
       builder.SeedTahun();

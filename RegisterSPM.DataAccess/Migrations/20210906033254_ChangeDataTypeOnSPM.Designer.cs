@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RegisterSPM.DataAccess.Data;
 
 namespace RegisterSPM.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210906033254_ChangeDataTypeOnSPM")]
+    partial class ChangeDataTypeOnSPM
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,36 +50,36 @@ namespace RegisterSPM.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "4509de54-f9b8-43ec-bc99-660157c0f37e",
-                            ConcurrencyStamp = "615b17d8-385d-477a-bb52-e714aa5841ef",
+                            Id = "d687ba05-ed69-45d8-b3ee-0f9f3bdf1142",
+                            ConcurrencyStamp = "70b52d85-47bf-415e-bcf9-983a2af11a5b",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "50340e58-1771-4085-a289-a4de775316a0",
-                            ConcurrencyStamp = "515ad828-0751-4e4e-98d3-6ad3dce7b646",
+                            Id = "b7cfcc51-57c9-4044-ae0f-7f3d5be9ad5f",
+                            ConcurrencyStamp = "471e9c2e-301c-499b-ab91-1ce85ed1721e",
                             Name = "SA",
                             NormalizedName = "SA"
                         },
                         new
                         {
-                            Id = "ad924998-ceb3-4a4d-bbca-8076306a51de",
-                            ConcurrencyStamp = "9c98df05-de5f-4a0a-8d4d-3de995711a89",
+                            Id = "d0d9cb7c-994d-42f0-bead-9b145e188c8e",
+                            ConcurrencyStamp = "a4b4aa09-603e-4de7-9bbe-433a10d2f610",
                             Name = "Registrator",
                             NormalizedName = "REGISTRATOR"
                         },
                         new
                         {
-                            Id = "5e41123d-5e2a-4f18-93f2-36946b9e891e",
-                            ConcurrencyStamp = "64c6a13c-7334-4c47-a035-7c3f32d6b957",
+                            Id = "6b387985-7df6-4462-8cb7-25ed907577cf",
+                            ConcurrencyStamp = "5daa54ae-e50b-4960-b4ab-cecaad37f152",
                             Name = "Verifikator",
                             NormalizedName = "VERIFIKATOR"
                         },
                         new
                         {
-                            Id = "be982b9a-2d2d-4cc4-8794-a6d93099951a",
-                            ConcurrencyStamp = "72ade860-efef-4862-8893-65f3a97caf96",
+                            Id = "d1b0ee02-4db5-41e0-87bd-13aaf9761a4c",
+                            ConcurrencyStamp = "befdb852-c42e-4328-a16d-e2dcbde779eb",
                             Name = "Approver",
                             NormalizedName = "APPROVER"
                         });
@@ -346,21 +348,6 @@ namespace RegisterSPM.DataAccess.Migrations
                         });
                 });
 
-            modelBuilder.Entity("RegisterSPM.Models.ChecklistSPM", b =>
-                {
-                    b.Property<int>("ChecklistId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SPMId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ChecklistId", "SPMId");
-
-                    b.HasIndex("SPMId");
-
-                    b.ToTable("ChecklistSPM");
-                });
-
             modelBuilder.Entity("RegisterSPM.Models.SPM", b =>
                 {
                     b.Property<int>("Id")
@@ -386,26 +373,14 @@ namespace RegisterSPM.DataAccess.Migrations
                     b.Property<string>("Keperluan")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Nilai")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("NoSPM")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("OPD")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("RejectedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("RejectedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("TglSPM")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("UnitKey")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("VerifiedBy")
                         .HasColumnType("nvarchar(max)");
@@ -415,9 +390,9 @@ namespace RegisterSPM.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OPD", "NoSPM", "UnitKey")
+                    b.HasIndex("OPD", "NoSPM")
                         .IsUnique()
-                        .HasFilter("[OPD] IS NOT NULL AND [NoSPM] IS NOT NULL AND [UnitKey] IS NOT NULL");
+                        .HasFilter("[OPD] IS NOT NULL AND [NoSPM] IS NOT NULL");
 
                     b.ToTable("SPM");
                 });
@@ -525,35 +500,6 @@ namespace RegisterSPM.DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("RegisterSPM.Models.ChecklistSPM", b =>
-                {
-                    b.HasOne("RegisterSPM.Models.Checklist", "Checklist")
-                        .WithMany("ListChecklistSPM")
-                        .HasForeignKey("ChecklistId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RegisterSPM.Models.SPM", "SPM")
-                        .WithMany("ListChecklistSPM")
-                        .HasForeignKey("SPMId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Checklist");
-
-                    b.Navigation("SPM");
-                });
-
-            modelBuilder.Entity("RegisterSPM.Models.Checklist", b =>
-                {
-                    b.Navigation("ListChecklistSPM");
-                });
-
-            modelBuilder.Entity("RegisterSPM.Models.SPM", b =>
-                {
-                    b.Navigation("ListChecklistSPM");
                 });
 #pragma warning restore 612, 618
         }

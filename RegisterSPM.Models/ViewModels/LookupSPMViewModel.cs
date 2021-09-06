@@ -13,5 +13,6 @@ namespace RegisterSPM.Models.ViewModels
       public string NoSpm { get; set; }
       public DateTime TglSpm { get; set; }
       public string Keperluan { get; set; }
+      public decimal Nilai { get; set; }
     }
 }

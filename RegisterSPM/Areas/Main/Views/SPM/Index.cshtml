@@ -1,6 +1,60 @@
 ﻿@using RegisterSPM.Utility
+@using System.Security.Claims
 @{
   ViewData["Active"] = "SPM";
+  var all = "";
+  var registered = "";
+  var verified = "";
+  var approved = "";
+  var rejected = "";
+  var status = Context.Request.Query["status"];
+
+  if (int.TryParse(status, out var statusNo))
+  {
+    switch (statusNo)
+    {
+      case SD.Registered:
+        registered = "active";
+        break;
+      case SD.Verified:
+        verified = "active";
+        break;
+      case SD.Approved:
+        approved = "active";
+        break;
+      case SD.Rejected:
+        rejected = "active";
+        break;
+      default:
+        all = "active";
+        break;
+    }
+  }
+  else
+  {
+    var role = User.FindFirstValue(ClaimTypes.Role);
+
+    switch (role)
+    {
+      case SD.RoleAdmin:
+      case SD.RoleSA:
+        all = "active";
+        break;
+      case SD.RoleRegistrator:
+        registered = "active";
+        Context.Response.Redirect("?status=1");
+        break;
+      case SD.RoleVerifikator:
+        verified = "active";
+        Context.Response.Redirect("?status=2");
+        break;
+      case SD.RoleApprover:
+        approved = "active";
+        Context.Response.Redirect("?status=3");
+        break;
+    }
+  }
+
 }
 
 
@@ -12,23 +66,20 @@
   <div class="card-header">
     <div class="row">
       <div class="col-md-6 mb-2">
-        <a class="btn btn-primary" asp-area="Main" asp-controller="SPM" asp-action="LookUp">
-          <i class="align-middle" data-feather="plus"></i> <span class="align-middle">Tambah</span>
-        </a>
+        @if (User.IsInRole(SD.RoleAdmin) || User.IsInRole(SD.RoleSA) || User.IsInRole(SD.RoleRegistrator))
+        {
+          <a class="btn btn-primary" asp-area="Main" asp-controller="SPM" asp-action="LookUp">
+            <i class="align-middle" data-feather="plus"></i> <span class="align-middle">Tambah</span>
+          </a>
+        }
       </div>
       <div class="col-md-6 text-sm-end">
-        <div class="btn-group btn-group-sm" role="group" aria-label="Basic radio toggle button group">
-          <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
-          <label class="btn btn-outline-secondary" for="btnradio1">All</label>
-
-          <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-          <label class="btn btn-outline-secondary" for="btnradio2">Registrasi</label>
-
-          <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
-          <label class="btn btn-outline-secondary" for="btnradio3">Verifikasi</label>
-
-          <input type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off">
-          <label class="btn btn-outline-secondary" for="btnradio4">Disetujui</label>
+        <div class="btn-group btn-group-sm" role="group" aria-label="Basic outlined example">
+          <a class="btn btn-outline-secondary @all" asp-area="Main" asp-controller="SPM" asp-action="Index" asp-route-status="0">All</a>
+          <a class="btn btn-outline-secondary @registered" asp-area="Main" asp-controller="SPM" asp-action="Index" asp-route-status="1">Registered</a>
+          <a class="btn btn-outline-secondary @verified" asp-area="Main" asp-controller="SPM" asp-action="Index" asp-route-status="2">Verified</a>
+          <a class="btn btn-outline-secondary @approved" asp-area="Main" asp-controller="SPM" asp-action="Index" asp-route-status="3">Approved</a>
+          <a class="btn btn-outline-secondary @rejected" asp-area="Main" asp-controller="SPM" asp-action="Index" asp-route-status="4">Rejected</a>
         </div>
       </div>
       @*<button type="button" class="btn btn-primary" onclick="showModal()">
@@ -56,6 +107,10 @@
 </div>
 
 @section Scripts {
+  <script>
+    var canVerify = @(User.IsInRole(SD.RoleAdmin) || User.IsInRole(SD.RoleSA) || User.IsInRole(SD.RoleVerifikator) ? "true" : "false");
+    var canApprove = @(User.IsInRole(SD.RoleAdmin) || User.IsInRole(SD.RoleSA) || User.IsInRole(SD.RoleApprover) ? "true" : "false");
+  </script>
   <script src="~/js/spm.js"></script>
   <script>
 
