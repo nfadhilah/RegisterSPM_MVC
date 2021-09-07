@@ -149,6 +149,7 @@ namespace RegisterSPM.Areas.Main.Controllers
       }
 
       _unitOfWork.Save();
+      _spCall.Execute("Usp_SPM_LOG_Update", new DynamicParameters(new {model.SPM.UnitKey, model.SPM.NoSPM, Status = SD.Verified}));
       return RedirectToAction(nameof(Index));
     }
 
@@ -194,6 +195,10 @@ namespace RegisterSPM.Areas.Main.Controllers
       existing.DocStatus = model.DocStatus;
 
       _unitOfWork.Save();
+
+      _spCall.Execute("Usp_SPM_LOG_Update",
+        new DynamicParameters(new { model.UnitKey, model.NoSPM, Status = SD.Approved }));
+
       return RedirectToAction(nameof(Index));
     }
 

@@ -22,6 +22,19 @@ function loadDataTable(url) {
       dataSrc: ''
     },
     columns: [
+      {
+        data: null,
+        render: function(data, type, row) {
+          switch (row.docStatus) {
+          case 1:
+            return `<div class="text-center"><div class="status-circle registered"></div></div>`;
+          case 2:
+            return `<div class="text-center"><div class="status-circle verified"></div></div>`;
+          case 3:
+            return `<div class="text-center"><div class="status-circle approved"></div></div>`;
+          }
+        }
+      },
       { data: 'opd' },
       { data: 'noSPM' },
       {
@@ -33,8 +46,8 @@ function loadDataTable(url) {
       { data: 'keperluan' },
       {
         data: null,
-        render: function (data, type, row) {
-          if (canVerify && row.docStatus !== 3) {
+        render: function(data, type, row) {
+          if (canVerify && row.docStatus < 3) {
             return `
                 <div>
                   <a href="/Main/SPM/Detail/${row.id}" class="btn btn-warning" style="cursor: pointer">
@@ -62,13 +75,29 @@ function loadDataTable(url) {
                 `;
           }
 
+          if (isAdmin && row.docStatus !== 3)
+            return `
+                <div>
+                  <a href="/Main/SPM/Detail/${row.id}" class="btn btn-warning" style="cursor: pointer">
+                    <i data-feather="eye"></i>
+                  </a>
+                  &nbsp;
+                  <a href="/Main/SPM/Verify/${row.id}" class="btn btn-success" style="cursor: pointer">
+                    <i data-feather="edit"></i>
+                  </a>
+                  &nbsp;
+                  <a href="/Main/SPM/Approve/${row.id}" class="btn btn-danger" style="cursor: pointer">
+                    <i data-feather="edit"></i>
+                  </a>
+                </div>
+                `;
+
           return `
                 <div>
                   <a href="/Main/SPM/Detail/${row.id}" class="btn btn-warning" style="cursor: pointer">
                     <i data-feather="eye"></i>
                   </a>
-                </div>
-                `;
+          `;
         },
         width: '20%'
       }

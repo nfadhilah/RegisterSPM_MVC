@@ -57,7 +57,6 @@
 
 }
 
-
 <div class="mb-3">
   <h3 class="h3 d-inline align-middle">Manajamen SPM</h3>
   <h5 class="badge bg-dark text-white ms-2">Manajemen Dokumen SPM (Registrasi/Verifikasi/Persetujuan)</h5>
@@ -93,6 +92,7 @@
         <table id="tblData" class="display" width="100%">
           <thead>
           <tr>
+            <th>Status</th>
             <th>OPD</th>
             <th>No. SPM</th>
             <th>Tgl Pengajuan</th>
@@ -108,8 +108,9 @@
 
 @section Scripts {
   <script>
-    var canVerify = @(User.IsInRole(SD.RoleAdmin) || User.IsInRole(SD.RoleSA) || User.IsInRole(SD.RoleVerifikator) ? "true" : "false");
-    var canApprove = @(User.IsInRole(SD.RoleAdmin) || User.IsInRole(SD.RoleSA) || User.IsInRole(SD.RoleApprover) ? "true" : "false");
+    var canVerify = @(User.IsInRole(SD.RoleVerifikator) ? "true" : "false");
+    var canApprove = @(User.IsInRole(SD.RoleApprover) ? "true" : "false");
+    var isAdmin = @(User.IsInRole(SD.RoleAdmin) || User.IsInRole(SD.RoleSA)? "true" : "false");
   </script>
   <script src="~/js/spm.js"></script>
   <script>
@@ -124,7 +125,7 @@
         success: function(res) {
           $(".modal-title").html("Test");
           $(".modal-body").html(res);
-          $("#btnModalSubmit").attr("form", "spm-form")
+          $("#btnModalSubmit").attr("form", "spm-form");
           modal.show();
         }
       });
