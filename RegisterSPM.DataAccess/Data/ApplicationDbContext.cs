@@ -39,6 +39,14 @@ namespace RegisterSPM.DataAccess.Data
           .HasForeignKey(x => x.ChecklistId);
       });
 
+      builder.Entity<SPM>(e =>
+      {
+        e.Property(x => x.CreatedDate).HasColumnType("datetime");
+        e.Property(x => x.VerifiedDate).HasColumnType("datetime");
+        e.Property(x => x.ApprovedDate).HasColumnType("datetime");
+        e.Property(x => x.RejectedDate).HasColumnType("datetime");
+      });
+
       builder.SeedRole();
       builder.SeedTahun();
       builder.SeedChecklist();

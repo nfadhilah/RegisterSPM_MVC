@@ -10,8 +10,8 @@ using RegisterSPM.DataAccess.Data;
 namespace RegisterSPM.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210906043441_AddNilaiOnSPM")]
-    partial class AddNilaiOnSPM
+    [Migration("20210909140045_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,36 +50,36 @@ namespace RegisterSPM.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "d8a789b3-351b-48f8-95b0-92345b383057",
-                            ConcurrencyStamp = "22f77f3d-9076-494f-a7b7-c3ed037b249c",
+                            Id = "b9a421be-c00b-4936-a827-88952eaeec73",
+                            ConcurrencyStamp = "5b4adbbc-64e8-47d0-9bfb-e8fb491de8c4",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "b04e0587-4182-4cf9-84b2-ec3b159683ee",
-                            ConcurrencyStamp = "913cd0e2-9de9-47f2-810a-26f2848a7ef4",
+                            Id = "808cad2c-9253-4c59-acd3-b9cbf0fc1d05",
+                            ConcurrencyStamp = "c8cbe351-b0c9-4bd9-b701-4c64d235b93b",
                             Name = "SA",
                             NormalizedName = "SA"
                         },
                         new
                         {
-                            Id = "781206ca-25ed-4d27-bc11-7fdd2991a22e",
-                            ConcurrencyStamp = "f96f2520-b504-40e0-af83-4bd75bc9cec1",
+                            Id = "19b30aa5-3912-440a-8a64-113d6f504793",
+                            ConcurrencyStamp = "6853ad38-2b37-4172-b5c8-7f003ea518f8",
                             Name = "Registrator",
                             NormalizedName = "REGISTRATOR"
                         },
                         new
                         {
-                            Id = "8e7f2aca-781a-452f-809a-beb9c68ce9c4",
-                            ConcurrencyStamp = "3aadf0f4-c2d0-4b4c-89ea-12b759717702",
+                            Id = "d62c7742-76e5-4a10-9c0b-a341b4681ab5",
+                            ConcurrencyStamp = "f7e381ca-5c01-4e75-b01c-1f1f9ea51f7b",
                             Name = "Verifikator",
                             NormalizedName = "VERIFIKATOR"
                         },
                         new
                         {
-                            Id = "42780693-f7bb-4142-829a-ee2631a1d544",
-                            ConcurrencyStamp = "1d6e81f8-e99d-4edb-9484-7b81ec69460f",
+                            Id = "d94445f9-fa22-47f8-b1c5-a3656098cc13",
+                            ConcurrencyStamp = "8a6dc435-ae16-499d-aeb3-68658a98df0f",
                             Name = "Approver",
                             NormalizedName = "APPROVER"
                         });
@@ -348,6 +348,21 @@ namespace RegisterSPM.DataAccess.Migrations
                         });
                 });
 
+            modelBuilder.Entity("RegisterSPM.Models.ChecklistSPM", b =>
+                {
+                    b.Property<int>("ChecklistId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SPMId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ChecklistId", "SPMId");
+
+                    b.HasIndex("SPMId");
+
+                    b.ToTable("ChecklistSPM");
+                });
+
             modelBuilder.Entity("RegisterSPM.Models.SPM", b =>
                 {
                     b.Property<int>("Id")
@@ -512,6 +527,35 @@ namespace RegisterSPM.DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("RegisterSPM.Models.ChecklistSPM", b =>
+                {
+                    b.HasOne("RegisterSPM.Models.Checklist", "Checklist")
+                        .WithMany("ListChecklistSPM")
+                        .HasForeignKey("ChecklistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RegisterSPM.Models.SPM", "SPM")
+                        .WithMany("ListChecklistSPM")
+                        .HasForeignKey("SPMId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Checklist");
+
+                    b.Navigation("SPM");
+                });
+
+            modelBuilder.Entity("RegisterSPM.Models.Checklist", b =>
+                {
+                    b.Navigation("ListChecklistSPM");
+                });
+
+            modelBuilder.Entity("RegisterSPM.Models.SPM", b =>
+                {
+                    b.Navigation("ListChecklistSPM");
                 });
 #pragma warning restore 612, 618
         }

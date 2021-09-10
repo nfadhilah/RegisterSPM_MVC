@@ -1,8 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Http
 @using RegisterSPM.Utility
 @using System.Security.Claims
+@using Microsoft.AspNetCore.Identity
 @using RegisterSPM.ViewComponents
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +31,7 @@
   <nav id="sidebar" class="sidebar js-sidebar">
     <div class="sidebar-content js-simplebar">
       <a class="sidebar-brand" href="index.html">
-        <span class="align-middle">REGISTRASI SPM</span>
+        <span class="align-middle">REGISTER SPM</span>
       </a>
       @(await Component.InvokeAsync<SidebarNavMenuViewComponent>())
     </div>
@@ -153,7 +153,10 @@
               </div>
             </div>
           </li>*@
-          @await Component.InvokeAsync("UserInfo")
+          @if (User.Identity?.IsAuthenticated ?? false)
+          {
+            @await Component.InvokeAsync("UserInfo")
+          }
         </ul>
       </div>
     </nav>
@@ -166,17 +169,13 @@
 
       <!-- Modal -->
       <div class="modal fade" id="app-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title"></h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body"></div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Batal</button>
-              <button id="btnModalSubmit" type="submit" class="btn btn-primary">Submit</button>
-            </div>
           </div>
         </div>
       </div>

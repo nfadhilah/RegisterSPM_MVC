@@ -47,14 +47,14 @@ function loadDataTable(url) {
       {
         data: null,
         render: function(data, type, row) {
-          if (canVerify && row.docStatus < 3) {
+          if (canVerify && row.docStatus === 1) {
             return `
                 <div>
-                  <a href="/Main/SPM/Detail/${row.id}" class="btn btn-warning" style="cursor: pointer">
+                  <a href="/Main/SPM/Detail/${row.id}" class="btn btn-primary" style="cursor: pointer">
                     <i data-feather="eye"></i>
                   </a>
                   &nbsp;
-                  <a href="/Main/SPM/Verify/${row.id}" class="btn btn-success" style="cursor: pointer">
+                  <a href="/Main/SPM/Verify/${row.id}" class="btn btn-warning" style="cursor: pointer">
                     <i data-feather="edit"></i>
                   </a>
                 </div>
@@ -64,37 +64,20 @@ function loadDataTable(url) {
           if (canApprove && row.docStatus === 2) {
             return `
                 <div>
-                  <a href="/Main/SPM/Detail/${row.id}" class="btn btn-warning" style="cursor: pointer">
+                  <a href="/Main/SPM/Detail/${row.id}" class="btn btn-primary" style="cursor: pointer">
                     <i data-feather="eye"></i>
                   </a>
                   &nbsp;
-                  <a href="/Main/SPM/Approve/${row.id}" class="btn btn-danger" style="cursor: pointer">
+                  <a href="/Main/SPM/Approve/${row.id}" class="btn btn-success" style="cursor: pointer">
                     <i data-feather="edit"></i>
                   </a>
                 </div>
                 `;
           }
 
-          if (isAdmin && row.docStatus !== 3)
-            return `
-                <div>
-                  <a href="/Main/SPM/Detail/${row.id}" class="btn btn-warning" style="cursor: pointer">
-                    <i data-feather="eye"></i>
-                  </a>
-                  &nbsp;
-                  <a href="/Main/SPM/Verify/${row.id}" class="btn btn-success" style="cursor: pointer">
-                    <i data-feather="edit"></i>
-                  </a>
-                  &nbsp;
-                  <a href="/Main/SPM/Approve/${row.id}" class="btn btn-danger" style="cursor: pointer">
-                    <i data-feather="edit"></i>
-                  </a>
-                </div>
-                `;
-
           return `
                 <div>
-                  <a href="/Main/SPM/Detail/${row.id}" class="btn btn-warning" style="cursor: pointer">
+                  <a href="/Main/SPM/Detail/${row.id}" class="btn btn-primary" style="cursor: pointer">
                     <i data-feather="eye"></i>
                   </a>
           `;

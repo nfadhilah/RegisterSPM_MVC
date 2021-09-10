@@ -81,6 +81,8 @@ namespace RegisterSPM
       });
 
       services.AddAutoMapper(nameof(Startup).GetType().Assembly);
+
+      services.AddHttpClient();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -109,7 +111,7 @@ namespace RegisterSPM
       {
         endpoints.MapControllerRoute(
           name: "areas",
-          pattern: "{area=Main}/{controller=Home}/{action=Index}/{id?}"
+          pattern: "{area=Main}/{controller=SPM}/{action=Index}/{id?}"
         );
       });
 

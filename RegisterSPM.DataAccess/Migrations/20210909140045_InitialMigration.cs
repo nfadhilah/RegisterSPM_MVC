@@ -26,6 +26,12 @@ namespace RegisterSPM.DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NIP = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Nama = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Jabatan = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -66,17 +72,21 @@ namespace RegisterSPM.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    UnitKey = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     OPD = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     NoSPM = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     TglSPM = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Keperluan = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedDate = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     VerifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    VerifiedDate = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    VerifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ApprovedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ApprovedDate = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DocStatus = table.Column<int>(type: "int", nullable: false)
+                    ApprovedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    RejectedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RejectedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Nilai = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DocStatus = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -203,16 +213,40 @@ namespace RegisterSPM.DataAccess.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ChecklistSPM",
+                columns: table => new
+                {
+                    SPMId = table.Column<int>(type: "int", nullable: false),
+                    ChecklistId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChecklistSPM", x => new { x.ChecklistId, x.SPMId });
+                    table.ForeignKey(
+                        name: "FK_ChecklistSPM_Checklist_ChecklistId",
+                        column: x => x.ChecklistId,
+                        principalTable: "Checklist",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ChecklistSPM_SPM_SPMId",
+                        column: x => x.SPMId,
+                        principalTable: "SPM",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "b8a0e5b4-238b-4dfe-8305-0bac6480dabc", "3b484219-15bc-4ba8-a7cc-2b0cd5e49ee8", "Admin", "ADMIN" },
-                    { "9f837b9d-0999-4e7d-a989-c09d90f20ba0", "cee57905-1e73-481a-997b-3fb1924aebe6", "SA", "SA" },
-                    { "bc1eca6b-55f0-4e97-b79c-eb1c9ed1b32a", "a2882fa7-60bd-4a9e-a1bb-81cb02782b0e", "Registrator", "REGISTRATOR" },
-                    { "6a06a7a1-1c38-435b-a804-590dec4fbb32", "e5698ec8-7724-4bc6-8330-045632229f85", "Verifikator", "VERIFIKATOR" },
-                    { "5c047807-b909-4623-b92e-b332c57df14b", "0301e027-dc29-46a6-b65a-5df01ac14b13", "Approver", "APPROVER" }
+                    { "b9a421be-c00b-4936-a827-88952eaeec73", "5b4adbbc-64e8-47d0-9bfb-e8fb491de8c4", "Admin", "ADMIN" },
+                    { "808cad2c-9253-4c59-acd3-b9cbf0fc1d05", "c8cbe351-b0c9-4bd9-b701-4c64d235b93b", "SA", "SA" },
+                    { "19b30aa5-3912-440a-8a64-113d6f504793", "6853ad38-2b37-4172-b5c8-7f003ea518f8", "Registrator", "REGISTRATOR" },
+                    { "d62c7742-76e5-4a10-9c0b-a341b4681ab5", "f7e381ca-5c01-4e75-b01c-1f1f9ea51f7b", "Verifikator", "VERIFIKATOR" },
+                    { "d94445f9-fa22-47f8-b1c5-a3656098cc13", "8a6dc435-ae16-499d-aeb3-68658a98df0f", "Approver", "APPROVER" }
                 });
 
             migrationBuilder.InsertData(
@@ -220,18 +254,23 @@ namespace RegisterSPM.DataAccess.Migrations
                 columns: new[] { "Id", "SeqNo", "Uraian" },
                 values: new object[,]
                 {
-                    { 1, "00001", "Penelitian Kelengkapan Dokumen SPP - UP/GU/TU/LS (Cheklist)" },
-                    { 2, "00002", "Surat Pengantar SPP - UP/GU/TU/LS" },
-                    { 3, "00003", "Ringkasan SPP - UP/GU/TU/LS " },
-                    { 4, "00004", "Rincian SPP - UP/GU/TU/LS" },
-                    { 5, "00005", "Surat Perintah Membayar (SPM)" },
-                    { 6, "00006", "Kuitansi Dinas" },
-                    { 7, "00007", "Surat Pernyataan Pengajuan SPP -UP/GU/TU/LS" },
-                    { 8, "00008", "Surat Pernyataan Tanggung jawab yang ditandatangani oleh PA/KPA" },
-                    { 9, "00009", "Faktur Pajak/SSP" },
                     { 10, "00010", "Salinan SPD" },
-                    { 11, "00011", "Foto Copy Buku Rekening Bank / Referensi Bank" }
+                    { 9, "00009", "Faktur Pajak/SSP" },
+                    { 8, "00008", "Surat Pernyataan Tanggung jawab yang ditandatangani oleh PA/KPA" },
+                    { 7, "00007", "Surat Pernyataan Pengajuan SPP -UP/GU/TU/LS" },
+                    { 6, "00006", "Kuitansi Dinas" },
+                    { 4, "00004", "Rincian SPP - UP/GU/TU/LS" },
+                    { 11, "00011", "Foto Copy Buku Rekening Bank / Referensi Bank" },
+                    { 3, "00003", "Ringkasan SPP - UP/GU/TU/LS " },
+                    { 2, "00002", "Surat Pengantar SPP - UP/GU/TU/LS" },
+                    { 1, "00001", "Penelitian Kelengkapan Dokumen SPP - UP/GU/TU/LS (Cheklist)" },
+                    { 5, "00005", "Surat Perintah Membayar (SPM)" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Tahun",
+                columns: new[] { "Id", "Label", "SeqNo" },
+                values: new object[] { 1, "2021", "00001" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -273,11 +312,16 @@ namespace RegisterSPM.DataAccess.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SPM_OPD_NoSPM",
+                name: "IX_ChecklistSPM_SPMId",
+                table: "ChecklistSPM",
+                column: "SPMId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SPM_OPD_NoSPM_UnitKey",
                 table: "SPM",
-                columns: new[] { "OPD", "NoSPM" },
+                columns: new[] { "OPD", "NoSPM", "UnitKey" },
                 unique: true,
-                filter: "[OPD] IS NOT NULL AND [NoSPM] IS NOT NULL");
+                filter: "[OPD] IS NOT NULL AND [NoSPM] IS NOT NULL AND [UnitKey] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tahun_SeqNo_Label",
@@ -304,10 +348,7 @@ namespace RegisterSPM.DataAccess.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Checklist");
-
-            migrationBuilder.DropTable(
-                name: "SPM");
+                name: "ChecklistSPM");
 
             migrationBuilder.DropTable(
                 name: "Tahun");
@@ -317,6 +358,12 @@ namespace RegisterSPM.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Checklist");
+
+            migrationBuilder.DropTable(
+                name: "SPM");
         }
     }
 }

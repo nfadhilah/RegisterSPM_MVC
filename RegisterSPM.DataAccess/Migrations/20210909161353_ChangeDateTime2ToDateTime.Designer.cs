@@ -10,8 +10,8 @@ using RegisterSPM.DataAccess.Data;
 namespace RegisterSPM.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210829162836_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20210909161353_ChangeDateTime2ToDateTime")]
+    partial class ChangeDateTime2ToDateTime
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,36 +50,36 @@ namespace RegisterSPM.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b8a0e5b4-238b-4dfe-8305-0bac6480dabc",
-                            ConcurrencyStamp = "3b484219-15bc-4ba8-a7cc-2b0cd5e49ee8",
+                            Id = "9cbba6a1-5581-4f1f-a1b3-b38501d68f1b",
+                            ConcurrencyStamp = "aa251ba7-f6e7-461b-80fa-d700cc82a0ef",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "9f837b9d-0999-4e7d-a989-c09d90f20ba0",
-                            ConcurrencyStamp = "cee57905-1e73-481a-997b-3fb1924aebe6",
+                            Id = "3dd6b657-0d7d-48c9-aeec-4d847d6999db",
+                            ConcurrencyStamp = "1e1a2833-3ff3-4330-8c2c-ab9ba7b14248",
                             Name = "SA",
                             NormalizedName = "SA"
                         },
                         new
                         {
-                            Id = "bc1eca6b-55f0-4e97-b79c-eb1c9ed1b32a",
-                            ConcurrencyStamp = "a2882fa7-60bd-4a9e-a1bb-81cb02782b0e",
+                            Id = "f4744d77-b829-4ac2-b057-59075cd31257",
+                            ConcurrencyStamp = "eacec4d3-f7f1-452e-af46-7f6eea26c6b6",
                             Name = "Registrator",
                             NormalizedName = "REGISTRATOR"
                         },
                         new
                         {
-                            Id = "6a06a7a1-1c38-435b-a804-590dec4fbb32",
-                            ConcurrencyStamp = "e5698ec8-7724-4bc6-8330-045632229f85",
+                            Id = "af4611a5-c67b-42b6-8b9f-3b67a86ef429",
+                            ConcurrencyStamp = "afd30bf7-4957-4b0b-85f4-af3d06603b4e",
                             Name = "Verifikator",
                             NormalizedName = "VERIFIKATOR"
                         },
                         new
                         {
-                            Id = "5c047807-b909-4623-b92e-b332c57df14b",
-                            ConcurrencyStamp = "0301e027-dc29-46a6-b65a-5df01ac14b13",
+                            Id = "2e5e2696-2e44-4eca-bd13-1144922f9553",
+                            ConcurrencyStamp = "5c7af4de-7583-4a75-8c86-3842b7c2322a",
                             Name = "Approver",
                             NormalizedName = "APPROVER"
                         });
@@ -119,6 +119,10 @@ namespace RegisterSPM.DataAccess.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -172,6 +176,8 @@ namespace RegisterSPM.DataAccess.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -342,6 +348,21 @@ namespace RegisterSPM.DataAccess.Migrations
                         });
                 });
 
+            modelBuilder.Entity("RegisterSPM.Models.ChecklistSPM", b =>
+                {
+                    b.Property<int>("ChecklistId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SPMId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ChecklistId", "SPMId");
+
+                    b.HasIndex("SPMId");
+
+                    b.ToTable("ChecklistSPM");
+                });
+
             modelBuilder.Entity("RegisterSPM.Models.SPM", b =>
                 {
                     b.Property<int>("Id")
@@ -352,20 +373,23 @@ namespace RegisterSPM.DataAccess.Migrations
                     b.Property<string>("ApprovedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ApprovedDate")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime?>("ApprovedDate")
+                        .HasColumnType("datetime");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CreatedDate")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
 
-                    b.Property<int>("DocStatus")
+                    b.Property<int?>("DocStatus")
                         .HasColumnType("int");
 
                     b.Property<string>("Keperluan")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Nilai")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("NoSPM")
                         .HasColumnType("nvarchar(450)");
@@ -373,20 +397,29 @@ namespace RegisterSPM.DataAccess.Migrations
                     b.Property<string>("OPD")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("RejectedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RejectedDate")
+                        .HasColumnType("datetime");
+
                     b.Property<DateTime>("TglSPM")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("UnitKey")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("VerifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("VerifiedDate")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime?>("VerifiedDate")
+                        .HasColumnType("datetime");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OPD", "NoSPM")
+                    b.HasIndex("OPD", "NoSPM", "UnitKey")
                         .IsUnique()
-                        .HasFilter("[OPD] IS NOT NULL AND [NoSPM] IS NOT NULL");
+                        .HasFilter("[OPD] IS NOT NULL AND [NoSPM] IS NOT NULL AND [UnitKey] IS NOT NULL");
 
                     b.ToTable("SPM");
                 });
@@ -412,6 +445,37 @@ namespace RegisterSPM.DataAccess.Migrations
                         .IsUnique();
 
                     b.ToTable("Tahun");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Label = "2021",
+                            SeqNo = "00001"
+                        });
+                });
+
+            modelBuilder.Entity("RegisterSPM.Models.ApplicationUser", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Jabatan")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NIP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nama")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -463,6 +527,35 @@ namespace RegisterSPM.DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("RegisterSPM.Models.ChecklistSPM", b =>
+                {
+                    b.HasOne("RegisterSPM.Models.Checklist", "Checklist")
+                        .WithMany("ListChecklistSPM")
+                        .HasForeignKey("ChecklistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RegisterSPM.Models.SPM", "SPM")
+                        .WithMany("ListChecklistSPM")
+                        .HasForeignKey("SPMId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Checklist");
+
+                    b.Navigation("SPM");
+                });
+
+            modelBuilder.Entity("RegisterSPM.Models.Checklist", b =>
+                {
+                    b.Navigation("ListChecklistSPM");
+                });
+
+            modelBuilder.Entity("RegisterSPM.Models.SPM", b =>
+                {
+                    b.Navigation("ListChecklistSPM");
                 });
 #pragma warning restore 612, 618
         }

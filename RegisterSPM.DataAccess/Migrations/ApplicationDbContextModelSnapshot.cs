@@ -48,36 +48,36 @@ namespace RegisterSPM.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "4509de54-f9b8-43ec-bc99-660157c0f37e",
-                            ConcurrencyStamp = "615b17d8-385d-477a-bb52-e714aa5841ef",
+                            Id = "9cbba6a1-5581-4f1f-a1b3-b38501d68f1b",
+                            ConcurrencyStamp = "aa251ba7-f6e7-461b-80fa-d700cc82a0ef",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "50340e58-1771-4085-a289-a4de775316a0",
-                            ConcurrencyStamp = "515ad828-0751-4e4e-98d3-6ad3dce7b646",
+                            Id = "3dd6b657-0d7d-48c9-aeec-4d847d6999db",
+                            ConcurrencyStamp = "1e1a2833-3ff3-4330-8c2c-ab9ba7b14248",
                             Name = "SA",
                             NormalizedName = "SA"
                         },
                         new
                         {
-                            Id = "ad924998-ceb3-4a4d-bbca-8076306a51de",
-                            ConcurrencyStamp = "9c98df05-de5f-4a0a-8d4d-3de995711a89",
+                            Id = "f4744d77-b829-4ac2-b057-59075cd31257",
+                            ConcurrencyStamp = "eacec4d3-f7f1-452e-af46-7f6eea26c6b6",
                             Name = "Registrator",
                             NormalizedName = "REGISTRATOR"
                         },
                         new
                         {
-                            Id = "5e41123d-5e2a-4f18-93f2-36946b9e891e",
-                            ConcurrencyStamp = "64c6a13c-7334-4c47-a035-7c3f32d6b957",
+                            Id = "af4611a5-c67b-42b6-8b9f-3b67a86ef429",
+                            ConcurrencyStamp = "afd30bf7-4957-4b0b-85f4-af3d06603b4e",
                             Name = "Verifikator",
                             NormalizedName = "VERIFIKATOR"
                         },
                         new
                         {
-                            Id = "be982b9a-2d2d-4cc4-8794-a6d93099951a",
-                            ConcurrencyStamp = "72ade860-efef-4862-8893-65f3a97caf96",
+                            Id = "2e5e2696-2e44-4eca-bd13-1144922f9553",
+                            ConcurrencyStamp = "5c7af4de-7583-4a75-8c86-3842b7c2322a",
                             Name = "Approver",
                             NormalizedName = "APPROVER"
                         });
@@ -372,13 +372,13 @@ namespace RegisterSPM.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ApprovedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<int?>("DocStatus")
                         .HasColumnType("int");
@@ -399,7 +399,7 @@ namespace RegisterSPM.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("RejectedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<DateTime>("TglSPM")
                         .HasColumnType("datetime2");
@@ -411,7 +411,7 @@ namespace RegisterSPM.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("VerifiedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.HasKey("Id");
 
