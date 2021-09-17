@@ -16,13 +16,14 @@
     <div class="card">
       <div class="card-body">
         <form id="detail" method="post">
+          <div asp-validation-summary="All" class="text-danger"></div>
           <div class="row">
             <div class="col-md-4">
               <input type="hidden" asp-for="SPM.Id"/>
               <input type="hidden" asp-for="SPM.UnitKey"/>
               <input type="hidden" asp-for="SPM.DocStatus"/>
               <input type="hidden" asp-for="SPM.CreatedBy"/>
-              <input type="hidden" asp-for="SPM.CreatedDate"/>
+              <input id="created-date" type="hidden" asp-for="SPM.CreatedDate"/>
               <input type="hidden" asp-for="SPM.VerifiedBy"/>
               <input type="hidden" asp-for="SPM.Nilai"/>
               <h4>SPM</h4>
@@ -85,7 +86,7 @@
             </div>
 
 
-            <partial name="_CollaboratorPartial" model="Model.SPM" />
+            <partial name="_CollaboratorPartial" model="Model.SPM"/>
           </div>
         </form>
       </div>
@@ -117,9 +118,24 @@
       });
     });
 
-    $("#selectAll").click(function() {
+    $("#selectAll").click(function () {
       $("input[type=checkbox]").prop('checked', $(this).prop('checked'));
 
+    });
+
+    $("#detail").submit(function (event) {
+      var verifiedDate = moment($("#date-picker").val(), "DD/MM/YYYY");
+      var createdDate = moment($("#created-date").val(), "DD/MM/YYYY");
+      if (verifiedDate.isBefore(createdDate)) {
+        swal({
+          title: 'Error',
+          text: 'Tanggal verifikasi kurang dari tanggal registrasi!',
+          icon: 'error',
+          dangerMode: true
+        });
+        return false;
+      };
+      return true;
     });
   </script>
 }

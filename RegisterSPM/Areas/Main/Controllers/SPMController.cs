@@ -56,8 +56,8 @@ namespace RegisterSPM.Areas.Main.Controllers
       spm.VerifiedDate = DateTime.Now;
       spm.DocStatus = SD.Verified;
 
-      var joinedItems = checklist.GroupJoin(spm.ListChecklistSPM, c => c.Id, l => l.ChecklistId, (c, l) => new { c, l })
-        .SelectMany(x => x.l.DefaultIfEmpty(), (c, l) => new { c, l });
+      var joinedItems = checklist.GroupJoin(spm.ListChecklistSPM, c => c.Id, l => l.ChecklistId, (c, l) => new {c, l})
+        .SelectMany(x => x.l.DefaultIfEmpty(), (c, l) => new {c, l});
 
       var model = new SPMDetailViewModel
       {
@@ -81,11 +81,9 @@ namespace RegisterSPM.Areas.Main.Controllers
       var checklist = await _unitOfWork.Checklist.GetAllAsync();
 
       if (spm == null) return NotFound();
-      var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-      var user = await _unitOfWork.ApplicationUser.GetFirstOrDefaultAsync(x => x.Id == userId);
-      spm.VerifiedBy = user.Nama;
-      spm.VerifiedDate = DateTime.Now;
+     
       spm.DocStatus = SD.Verified;
+      spm.VerifiedDate = DateTime.Now;
 
       var joinedItems = checklist.GroupJoin(spm.ListChecklistSPM, c => c.Id, l => l.ChecklistId, (c, l) => new {c, l})
         .SelectMany(x => x.l.DefaultIfEmpty(), (c, l) => new {c, l});
@@ -109,9 +107,15 @@ namespace RegisterSPM.Areas.Main.Controllers
     [Authorize(Roles = SD.RoleSA + "," + SD.RoleAdmin + "," + SD.RoleVerifikator)]
     public async Task<IActionResult> Verify(SPMDetailViewModel model)
     {
+      if (model.SPM.VerifiedDate < model.SPM.CreatedDate)
+        ModelState.AddModelError("bad-date", "Tanggal Verifikasi tidak boleh kurang dari tanggal registrasi.");
+
       if (!ModelState.IsValid) return View(model);
 
       var existing = await _unitOfWork.SPM.GetFirstOrDefaultAsync(x => x.Id == model.SPM.Id, "ListChecklistSPM");
+
+      var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+      var user = await _unitOfWork.ApplicationUser.GetFirstOrDefaultAsync(x => x.Id == userId);
 
       existing.Id = model.SPM.Id;
       existing.UnitKey = model.SPM.UnitKey;
@@ -121,7 +125,7 @@ namespace RegisterSPM.Areas.Main.Controllers
       existing.Keperluan = model.SPM.Keperluan;
       existing.CreatedBy = model.SPM.CreatedBy;
       existing.CreatedDate = model.SPM.CreatedDate;
-      existing.VerifiedBy = model.SPM.VerifiedBy;
+      existing.VerifiedBy = user.Nama;
       existing.VerifiedDate = model.SPM.VerifiedDate;
       existing.ApprovedBy = model.SPM.ApprovedBy;
       existing.ApprovedDate = model.SPM.ApprovedDate;
@@ -149,7 +153,8 @@ namespace RegisterSPM.Areas.Main.Controllers
       }
 
       _unitOfWork.Save();
-      _spCall.Execute("Usp_SPM_LOG_Update", new DynamicParameters(new {model.SPM.UnitKey, model.SPM.NoSPM, Status = SD.Verified}));
+      _spCall.Execute("Usp_SPM_LOG_Update",
+        new DynamicParameters(new {model.SPM.UnitKey, model.SPM.NoSPM, Status = SD.Verified}));
       return RedirectToAction(nameof(Index));
     }
 
@@ -159,9 +164,6 @@ namespace RegisterSPM.Areas.Main.Controllers
       var spm = await _unitOfWork.SPM.GetFirstOrDefaultAsync(x => x.Id == id, "ListChecklistSPM");
 
       if (spm == null) return NotFound();
-      var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-      var user = await _unitOfWork.ApplicationUser.GetFirstOrDefaultAsync(x => x.Id == userId);
-      spm.ApprovedBy = user.Nama;
       spm.ApprovedDate = DateTime.Now;
       spm.DocStatus = SD.Approved;
 
@@ -173,9 +175,16 @@ namespace RegisterSPM.Areas.Main.Controllers
     [Authorize(Roles = SD.RoleSA + "," + SD.RoleAdmin + "," + SD.RoleApprover)]
     public async Task<IActionResult> Approve(SPM model)
     {
+      if (model.ApprovedDate < model.VerifiedDate)
+        ModelState.AddModelError("bad-date", "Tanggal persetujuan tidak boleh kurang dari tanggal verifikasi.");
+
+      if (!ModelState.IsValid) return View(model);
+
       if (!ModelState.IsValid) return View(model);
 
       var existing = await _unitOfWork.SPM.GetFirstOrDefaultAsync(x => x.Id == model.Id);
+      var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+      var user = await _unitOfWork.ApplicationUser.GetFirstOrDefaultAsync(x => x.Id == userId);
 
       existing.Id = model.Id;
       existing.UnitKey = model.UnitKey;
@@ -187,7 +196,7 @@ namespace RegisterSPM.Areas.Main.Controllers
       existing.CreatedDate = model.CreatedDate;
       existing.VerifiedBy = model.VerifiedBy;
       existing.VerifiedDate = model.VerifiedDate;
-      existing.ApprovedBy = model.ApprovedBy;
+      existing.ApprovedBy = user.Nama;
       existing.ApprovedDate = model.ApprovedDate;
       existing.RejectedBy = model.RejectedBy;
       existing.RejectedDate = model.RejectedDate;
@@ -197,7 +206,7 @@ namespace RegisterSPM.Areas.Main.Controllers
       _unitOfWork.Save();
 
       _spCall.Execute("Usp_SPM_LOG_Update",
-        new DynamicParameters(new { model.UnitKey, model.NoSPM, Status = SD.Approved }));
+        new DynamicParameters(new {model.UnitKey, model.NoSPM, Status = SD.Approved}));
 
       return RedirectToAction(nameof(Index));
     }

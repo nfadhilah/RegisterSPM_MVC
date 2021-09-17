@@ -16,19 +16,20 @@
     <div class="card">
       <div class="card-body">
         <form id="detail" method="post">
+          <div asp-validation-summary="All" class="text-danger"></div>
           <div class="row">
             <div class="col-md-8">
-              <input type="hidden" asp-for="Id" />
-              <input type="hidden" asp-for="UnitKey" />
-              <input type="hidden" asp-for="DocStatus" />
-              <input type="hidden" asp-for="CreatedBy" />
-              <input type="hidden" asp-for="CreatedDate" />
-              <input type="hidden" asp-for="VerifiedBy" />
-              <input type="hidden" asp-for="VerifiedDate" />
-              <input type="hidden" asp-for="ApprovedBy" />
-              <input type="hidden" asp-for="Nilai" />
+              <input type="hidden" asp-for="Id"/>
+              <input type="hidden" asp-for="UnitKey"/>
+              <input type="hidden" asp-for="DocStatus"/>
+              <input type="hidden" asp-for="CreatedBy"/>
+              <input type="hidden" asp-for="CreatedDate"/>
+              <input type="hidden" asp-for="VerifiedBy"/>
+              <input id="verified-date" type="hidden" asp-for="VerifiedDate"/>
+              <input type="hidden" asp-for="ApprovedBy"/>
+              <input type="hidden" asp-for="Nilai"/>
               <h4>SPM</h4>
-              <hr />
+              <hr/>
               <div class="form-group my-2">
                 <label asp-for="OPD"></label>
                 <textarea asp-for="OPD" class="form-control" readonly cols="3"></textarea>
@@ -41,7 +42,7 @@
               </div>
               <div class="form-group my-2">
                 <label asp-for="TglSPM"></label>
-                <input type="text" asp-for="TglSPM" class="form-control" readonly />
+                <input type="text" asp-for="TglSPM" class="form-control" readonly/>
                 <span asp-validation-for="TglSPM" class="text-danger"></span>
               </div>
               <div class="form-group my-2">
@@ -51,56 +52,15 @@
               </div>
               <div class="form-group my-2">
                 <label>Nilai</label>
-                <input type="text" value="@Model.Nilai.ToString("C")" class="form-control" readonly />
+                <input type="text" value="@Model.Nilai.ToString("C")" class="form-control" readonly/>
               </div>
               <div class="form-group my-2">
                 <label>Tgl. Pengesahan</label>
-                <input type="text" id="date-picker" asp-for="ApprovedDate" value="@Model.ApprovedDate.Value.ToShortDateString()" class="form-control" />
+                <input type="text" id="date-picker" asp-for="ApprovedDate" value="@Model.ApprovedDate.Value.ToShortDateString()" class="form-control"/>
               </div>
             </div>
-            
-            <div class="col-md-4">
-              <h4>Kolaborator</h4>
-              <hr/>
-              <div class="list-group">
-                <a href="#" class="list-group-item">
-                  <div class="row g-0 align-items-center">
-                    <div class="col-2">
-                      <img src="~/img/avatars/avatar-5.jpg" class="avatar img-fluid rounded-circle" alt="Vanessa Tucker">
-                    </div>
-                    <div class="col-10 ps-2">
-                      <div class="text-dark">Vanessa Tucker</div>
-                      <div class="text-muted small mt-1">Nam pretium turpis et arcu. Duis arcu tortor.</div>
-                      <div class="text-muted small mt-1">15m ago</div>
-                    </div>
-                  </div>
-                </a>
-                <a href="#" class="list-group-item">
-                  <div class="row g-0 align-items-center">
-                    <div class="col-2">
-                      <img src="~/img/avatars/avatar-2.jpg" class="avatar img-fluid rounded-circle" alt="William Harris">
-                    </div>
-                    <div class="col-10 ps-2">
-                      <div class="text-dark">William Harris</div>
-                      <div class="text-muted small mt-1">Curabitur ligula sapien euismod vitae.</div>
-                      <div class="text-muted small mt-1">2h ago</div>
-                    </div>
-                  </div>
-                </a>
-                <a href="#" class="list-group-item">
-                  <div class="row g-0 align-items-center">
-                    <div class="col-2">
-                      <img src="~/img/avatars/avatar-2.jpg" class="avatar img-fluid rounded-circle" alt="William Harris">
-                    </div>
-                    <div class="col-10 ps-2">
-                      <div class="text-dark">William Harris</div>
-                      <div class="text-muted small mt-1">Curabitur ligula sapien euismod vitae.</div>
-                      <div class="text-muted small mt-1">2h ago</div>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
+
+            <partial name="_CollaboratorPartial" model="Model"/>
           </div>
         </form>
       </div>
@@ -135,6 +95,21 @@
     $("#selectAll").click(function() {
       $("input[type=checkbox]").prop('checked', $(this).prop('checked'));
 
+    });
+
+    $("#detail").submit(function (event) {
+      var createdDate = moment($("#date-picker").val(), "DD/MM/YYYY");
+      var verifiedDate = moment($("#verified-date").val(), "DD/MM/YYYY");
+      if (createdDate.isBefore(verifiedDate)) {
+        swal({
+          title: 'Error',
+          text: 'Tanggal persetujuan kurang dari tanggal verifikasi!',
+          icon: 'error',
+          dangerMode: true
+        });
+        return false;
+      };
+      return true;
     });
   </script>
 }
