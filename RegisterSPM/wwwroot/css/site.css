@@ -59,8 +59,8 @@ button.accept-policy {
 }
 
 body {*/
-  /* Margin bottom by footer height */
-  /*margin-bottom: 60px;
+/* Margin bottom by footer height */
+/*margin-bottom: 60px;
 }
 .footer {
   position: absolute;
@@ -71,46 +71,50 @@ body {*/
 /*}*/
 
 .status-circle {
-  display: inline-block;
-  height: 1rem;
-  width: 1rem;
-  border-radius: 4rem;
-  opacity: 0.0;
-  -webkit-animation: pulsate 1000ms ease-out;
-  -webkit-animation-iteration-count: infinite;
-  -webkit-transition: background-color 300ms linear;
-  -moz-transition: background-color 300ms linear;
-  -o-transition: background-color 300ms linear;
-  -ms-transition: background-color 300ms linear;
-  transition: background-color 300ms linear;
+    display: inline-block;
+    height: 1rem;
+    width: 1rem;
+    border-radius: 4rem;
+    opacity: 0.0;
+    -webkit-animation: pulsate 1000ms ease-out;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-transition: background-color 300ms linear;
+    -moz-transition: background-color 300ms linear;
+    -o-transition: background-color 300ms linear;
+    -ms-transition: background-color 300ms linear;
+    transition: background-color 300ms linear;
 }
 
 @-webkit-keyframes pulsate {
-  0% {
-    opacity: 0.1;
-  }
+    0% {
+        opacity: 0.1;
+    }
 
-  40% {
-    opacity: 1.0;
-  }
+    40% {
+        opacity: 1.0;
+    }
 
-  60% {
-    opacity: 1.0;
-  }
+    60% {
+        opacity: 1.0;
+    }
 
-  100% {
-    opacity: 0.1;
-  }
+    100% {
+        opacity: 0.1;
+    }
 }
 
 .registered {
-  background: red;
+    background: dodgerblue;
 }
 
 .verified {
-  background: orange;
+    background: orange;
 }
 
 .approved {
-  background: green;
+    background: green;
+}
+
+.rejected {
+    background: red;
 }

@@ -1,118 +1,118 @@
 ﻿@using RegisterSPM.Utility
 @using System.Security.Claims
 @{
-  ViewData["Active"] = "SPM";
-  var all = "";
-  var registered = "";
-  var verified = "";
-  var approved = "";
-  var rejected = "";
-  var status = Context.Request.Query["status"];
+    ViewData["Active"] = "SPM";
+    var all = "";
+    var registered = "";
+    var verified = "";
+    var approved = "";
+    var rejected = "";
+    var status = Context.Request.Query["status"];
 
-  if (int.TryParse(status, out var statusNo))
-  {
-    switch (statusNo)
+    if (int.TryParse(status, out var statusNo))
     {
-      case SD.Registered:
-        registered = "active";
-        break;
-      case SD.Verified:
-        verified = "active";
-        break;
-      case SD.Approved:
-        approved = "active";
-        break;
-      case SD.Rejected:
-        rejected = "active";
-        break;
-      default:
-        all = "active";
-        break;
+        switch (statusNo)
+        {
+            case SD.Registered:
+                registered = "active";
+                break;
+            case SD.Verified:
+                verified = "active";
+                break;
+            case SD.Approved:
+                approved = "active";
+                break;
+            case SD.Rejected:
+                rejected = "active";
+                break;
+            default:
+                all = "active";
+                break;
+        }
     }
-  }
-  else
-  {
-    var role = User.FindFirstValue(ClaimTypes.Role);
+    else
+    {
+        var role = User.FindFirstValue(ClaimTypes.Role);
 
-    switch (role)
-    {
-      case SD.RoleAdmin:
-      case SD.RoleSA:
-        all = "active";
-        break;
-      case SD.RoleRegistrator:
-        registered = "active";
-        Context.Response.Redirect("?status=1");
-        break;
-      case SD.RoleVerifikator:
-        verified = "active";
-        Context.Response.Redirect("?status=2");
-        break;
-      case SD.RoleApprover:
-        approved = "active";
-        Context.Response.Redirect("?status=2");
-        break;
+        switch (role)
+        {
+            case SD.RoleAdmin:
+            case SD.RoleSA:
+                all = "active";
+                break;
+            case SD.RoleRegistrator:
+                registered = "active";
+                Context.Response.Redirect("?status=1");
+                break;
+            case SD.RoleVerifikator:
+                verified = "active";
+                Context.Response.Redirect("?status=2");
+                break;
+            case SD.RoleApprover:
+                approved = "active";
+                Context.Response.Redirect("?status=2");
+                break;
+        }
     }
-  }
 
 }
 
 <div class="mb-3">
-  <h3 class="h3 d-inline align-middle">Manajemen SPM</h3>
-  <h5 class="badge bg-dark text-white ms-2">Manajemen Dokumen SPM (Registrasi/Verifikasi/Persetujuan)</h5>
+    <h3 class="h3 d-inline align-middle">Manajemen SPM</h3>
+    <h5 class="badge bg-dark text-white ms-2">Manajemen Dokumen SPM (Registrasi/Verifikasi/Persetujuan)</h5>
 </div>
 <div class="card">
-  <div class="card-header">
-    <div class="row">
-      <div class="col-md-6 mb-2">
-        @if (User.IsInRole(SD.RoleAdmin) || User.IsInRole(SD.RoleSA) || User.IsInRole(SD.RoleRegistrator))
-        {
-          <a class="btn btn-primary" asp-area="Main" asp-controller="SPM" asp-action="LookUp">
-            <i class="align-middle" data-feather="plus"></i> <span class="align-middle">Tambah</span>
-          </a>
-        }
-      </div>
-      <div class="col-md-6 text-sm-end">
-        <div class="btn-group btn-group-sm" role="group" aria-label="Basic outlined example">
-          <a class="btn btn-outline-secondary @all" asp-area="Main" asp-controller="SPM" asp-action="Index" asp-route-status="0">All</a>
-          <a class="btn btn-outline-secondary @registered" asp-area="Main" asp-controller="SPM" asp-action="Index" asp-route-status="1">Registered</a>
-          <a class="btn btn-outline-secondary @verified" asp-area="Main" asp-controller="SPM" asp-action="Index" asp-route-status="2">Verified</a>
-          <a class="btn btn-outline-secondary @approved" asp-area="Main" asp-controller="SPM" asp-action="Index" asp-route-status="3">Approved</a>
-          <a class="btn btn-outline-secondary @rejected" asp-area="Main" asp-controller="SPM" asp-action="Index" asp-route-status="4">Rejected</a>
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6 mb-2">
+                @if (User.IsInRole(SD.RoleAdmin) || User.IsInRole(SD.RoleSA) || User.IsInRole(SD.RoleRegistrator))
+                {
+                    <a class="btn btn-primary" asp-area="Main" asp-controller="SPM" asp-action="LookUp">
+                        <i class="align-middle" data-feather="plus"></i> <span class="align-middle">Tambah</span>
+                    </a>
+                }
+            </div>
+            <div class="col-md-6 text-sm-end">
+                <div class="btn-group btn-group-sm" role="group" aria-label="Basic outlined example">
+                    <a class="btn btn-outline-secondary @all" asp-area="Main" asp-controller="SPM" asp-action="Index" asp-route-status="0">All</a>
+                    <a class="btn btn-outline-secondary @registered" asp-area="Main" asp-controller="SPM" asp-action="Index" asp-route-status="1">Masuk</a>
+                    <a class="btn btn-outline-secondary @verified" asp-area="Main" asp-controller="SPM" asp-action="Index" asp-route-status="2">Diverifikasi</a>
+                    <a class="btn btn-outline-secondary @approved" asp-area="Main" asp-controller="SPM" asp-action="Index" asp-route-status="3">Disetujui</a>
+                    <a class="btn btn-outline-secondary @rejected" asp-area="Main" asp-controller="SPM" asp-action="Index" asp-route-status="4">Ditolak</a>
+                </div>
+            </div>
+            @*<button type="button" class="btn btn-primary" onclick="showModal()">
+                Launch demo modal
+                </button>*@
         </div>
-      </div>
-      @*<button type="button" class="btn btn-primary" onclick="showModal()">
-              Launch demo modal
-            </button>*@
     </div>
-  </div>
-  <div class="card-body">
-    <div class="row">
-      <div class="col-12">
-        <table id="tblData" class="display" width="100%">
-          <thead>
-          <tr>
-            <th>Status</th>
-            <th>OPD</th>
-            <th>No. SPM</th>
-            <th>Tgl Pengajuan</th>
-            <th>Keperluan</th>
-            <th class="text-center"></th>
-          </tr>
-          </thead>
-        </table>
-      </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <table id="tblData" class="display" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Status</th>
+                            <th>OPD</th>
+                            <th>No. SPM</th>
+                            <th>Tgl Pengajuan</th>
+                            <th>Keperluan</th>
+                            <th class="text-center"></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 @section Scripts {
-  <script>
+<script>
     var canVerify = @(User.IsInRole(SD.RoleAdmin) || User.IsInRole(SD.RoleSA) || User.IsInRole(SD.RoleVerifikator) ? "true" : "false");
     var canApprove = @(User.IsInRole(SD.RoleAdmin) || User.IsInRole(SD.RoleSA) || User.IsInRole(SD.RoleApprover) ? "true" : "false");
-  </script>
-  <script src="~/js/spm.js"></script>
-  <script>
+</script>
+<script src="~/js/spm.js"></script>
+<script>
 
 
     var appModal = $("#app-modal");
@@ -155,5 +155,5 @@
     function onCancel() {
       modal.hide();
     }
-  </script>
+</script>
 }

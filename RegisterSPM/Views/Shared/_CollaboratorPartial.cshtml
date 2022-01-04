@@ -1,53 +1,68 @@
 ﻿@model SPM
 
 <div class="col-md-3">
-  <h4>Kolaborator</h4>
-  <hr />
-  <div class="list-group">
-    @if (!string.IsNullOrWhiteSpace(Model.ApprovedBy))
-    {
-    <a href="#" class="list-group-item">
-      <div class="row g-0 align-items-center">
-        <div class="col-2">
-          <img src="~/img/avatars/default_avatar.png" class="avatar img-fluid rounded-circle" alt="William Harris">
-        </div>
-        <div class="col-10 ps-2">
-          <div class="text-dark">Pengesahan</div>
-          <div class="text-muted small mt-1">@Model.ApprovedBy</div>
-          <div class="text-muted small mt-1">@Model.ApprovedDate.Value.ToShortDateString()</div>
-        </div>
-      </div>
-    </a>
-    }
-    @if (!string.IsNullOrWhiteSpace(Model.VerifiedBy))
-    {
-      <a href="#" class="list-group-item">
-        <div class="row g-0 align-items-center">
-          <div class="col-2">
-            <img src="~/img/avatars/default_avatar.png" class="avatar img-fluid rounded-circle" alt="William Harris">
-          </div>
-          <div class="col-10 ps-2">
-            <div class="text-dark">Verifikasi</div>
-            <div class="text-muted small mt-1">@Model.VerifiedBy</div>
-            <div class="text-muted small mt-1">@Model.VerifiedDate.Value.ToShortDateString()</div>
-          </div>
-        </div>
-      </a>
-    }
-    @if (!string.IsNullOrWhiteSpace(Model.CreatedBy))
-    {
-    <a href="#" class="list-group-item">
-      <div class="row g-0 align-items-center">
-        <div class="col-2">
-          <img src="~/img/avatars/default_avatar.png" class="avatar img-fluid rounded-circle" alt="Vanessa Tucker">
-        </div>
-        <div class="col-10 ps-2">
-          <div class="text-dark">Registrasi</div>
-          <div class="text-muted small mt-1">@Model.CreatedBy</div>
-          <div class="text-muted small mt-1">@Model.CreatedDate.Value.ToShortDateString()</div>
-        </div>
-      </div>
-    </a>
-    }
-  </div>
+    <h4>Kolaborator</h4>
+    <hr />
+    <div class="list-group">
+        @if (!string.IsNullOrWhiteSpace(Model.RejectedBy))
+        {
+            <a href="#" class="list-group-item">
+                <div class="row g-0 align-items-center">
+                    <div class="col-2">
+                        <img src="~/img/avatars/default_avatar.png" class="avatar img-fluid rounded-circle" alt="William Harris">
+                    </div>
+                    <div class="col-10 ps-2">
+                        <div class="text-dark">Pembatalan/Revisi</div>
+                        <div class="text-muted small mt-1">@Model.RejectedBy</div>
+                        <div class="text-muted small mt-1">@Model.RejectedDate.Value.ToShortDateString()</div>
+                    </div>
+                </div>
+            </a>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.ApprovedBy))
+        {
+            <a href="#" class="list-group-item">
+                <div class="row g-0 align-items-center">
+                    <div class="col-2">
+                        <img src="~/img/avatars/default_avatar.png" class="avatar img-fluid rounded-circle" alt="William Harris">
+                    </div>
+                    <div class="col-10 ps-2">
+                        <div class="text-dark">Pengesahan</div>
+                        <div class="text-muted small mt-1">@Model.ApprovedBy</div>
+                        <div class="text-muted small mt-1">@Model.ApprovedDate.Value.ToShortDateString()</div>
+                    </div>
+                </div>
+            </a>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.VerifiedBy))
+        {
+            <a href="#" class="list-group-item">
+                <div class="row g-0 align-items-center">
+                    <div class="col-2">
+                        <img src="~/img/avatars/default_avatar.png" class="avatar img-fluid rounded-circle" alt="William Harris">
+                    </div>
+                    <div class="col-10 ps-2">
+                        <div class="text-dark">Verifikasi</div>
+                        <div class="text-muted small mt-1">@Model.VerifiedBy</div>
+                        <div class="text-muted small mt-1">@Model.VerifiedDate.Value.ToShortDateString()</div>
+                    </div>
+                </div>
+            </a>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.CreatedBy))
+        {
+            <a href="#" class="list-group-item">
+                <div class="row g-0 align-items-center">
+                    <div class="col-2">
+                        <img src="~/img/avatars/default_avatar.png" class="avatar img-fluid rounded-circle" alt="Vanessa Tucker">
+                    </div>
+                    <div class="col-10 ps-2">
+                        <div class="text-dark">Registrasi</div>
+                        <div class="text-muted small mt-1">@Model.CreatedBy</div>
+                        <div class="text-muted small mt-1">@Model.CreatedDate.Value.ToShortDateString()</div>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
 </div>
