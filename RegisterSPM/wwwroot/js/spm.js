@@ -98,6 +98,9 @@ function loadDataTable(url) {
                   <a href="/Main/SPM/Detail/${row.id}" class="btn btn-primary my-1 mx-1" style="cursor: pointer">
                     <i data-feather="eye"></i> Detil
                   </a>
+                  <a onclick="onDelete('/Main/SPM/Delete/${row.id}')" class="btn btn-danger my-1 mx-1" style="cursor: pointer">
+                    <i data-feather="trash"></i> Batal
+                  </a>
                 </div>
 `;
                 },
