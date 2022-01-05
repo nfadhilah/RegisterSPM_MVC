@@ -9,10 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace RegisterSPM.Models.ViewModels
 {
-  public class SPMDetailViewModel
-  {
-    public SPM SPM { get; set; }
-    [Required]
-    public List<SelectListItem> Checklist { get; set; }
-  }
+    public class SPMDetailViewModel
+    {
+        public SPM SPM { get; set; }
+        public bool IsRejected { get; set; }
+        [Required]
+        public List<SelectListItem> Checklist { get; set; }
+    }
 }

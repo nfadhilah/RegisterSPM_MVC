@@ -62,6 +62,7 @@ namespace RegisterSPM.Areas.Main.Controllers
             var model = new SPMDetailViewModel
             {
                 SPM = spm,
+                IsRejected = spm.DocStatus == SD.Rejected,
                 Checklist = joinedItems.Select(x => new SelectListItem
                 {
                     Value = x.c.c.Id.ToString(),
@@ -129,8 +130,6 @@ namespace RegisterSPM.Areas.Main.Controllers
             existing.VerifiedDate = model.SPM.VerifiedDate;
             existing.ApprovedBy = model.SPM.ApprovedBy;
             existing.ApprovedDate = model.SPM.ApprovedDate;
-            existing.RejectedBy = model.SPM.RejectedBy;
-            existing.RejectedDate = model.SPM.RejectedDate;
             existing.Nilai = model.SPM.Nilai;
             existing.DocStatus = model.SPM.DocStatus;
 
@@ -152,9 +151,17 @@ namespace RegisterSPM.Areas.Main.Controllers
                 });
             }
 
+            if (model.IsRejected)
+            {
+                existing.RejectedBy = existing.VerifiedBy;
+                existing.RejectedDate = existing.VerifiedDate;
+                existing.AlasanPenolakan = model.SPM.AlasanPenolakan;
+                existing.DocStatus = SD.Rejected;
+            }
+
             _unitOfWork.Save();
             _spCall.Execute("Usp_SPM_LOG_Update",
-              new DynamicParameters(new { model.SPM.UnitKey, model.SPM.NoSPM, Status = SD.Verified }));
+              new DynamicParameters(new { model.SPM.UnitKey, model.SPM.NoSPM, Status = existing.DocStatus }));
             return RedirectToAction(nameof(Index));
         }
 
@@ -164,49 +171,62 @@ namespace RegisterSPM.Areas.Main.Controllers
             var spm = await _unitOfWork.SPM.GetFirstOrDefaultAsync(x => x.Id == id, "ListChecklistSPM");
 
             if (spm == null) return NotFound();
+
             spm.ApprovedDate = DateTime.Now;
             spm.DocStatus = SD.Approved;
 
-            return View(spm);
+            var model = new SPMApprovalViewModel
+            {
+                SPM = spm,
+                IsRejected = false
+            };
+
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = SD.RoleSA + "," + SD.RoleAdmin + "," + SD.RoleApprover)]
-        public async Task<IActionResult> Approve(SPM model)
+        public async Task<IActionResult> Approve(SPMApprovalViewModel model)
         {
-            if (model.ApprovedDate < model.VerifiedDate)
+            if (model.SPM.ApprovedDate < model.SPM.VerifiedDate)
                 ModelState.AddModelError("bad-date", "Tanggal persetujuan tidak boleh kurang dari tanggal verifikasi.");
 
             if (!ModelState.IsValid) return View(model);
 
-            if (!ModelState.IsValid) return View(model);
-
-            var existing = await _unitOfWork.SPM.GetFirstOrDefaultAsync(x => x.Id == model.Id);
+            var existing = await _unitOfWork.SPM.GetFirstOrDefaultAsync(x => x.Id == model.SPM.Id);
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _unitOfWork.ApplicationUser.GetFirstOrDefaultAsync(x => x.Id == userId);
 
-            existing.Id = model.Id;
-            existing.UnitKey = model.UnitKey;
-            existing.OPD = model.OPD;
-            existing.NoSPM = model.NoSPM;
-            existing.TglSPM = model.TglSPM;
-            existing.Keperluan = model.Keperluan;
-            existing.CreatedBy = model.CreatedBy;
-            existing.CreatedDate = model.CreatedDate;
-            existing.VerifiedBy = model.VerifiedBy;
-            existing.VerifiedDate = model.VerifiedDate;
+            existing.Id = model.SPM.Id;
+            existing.UnitKey = model.SPM.UnitKey;
+            existing.OPD = model.SPM.OPD;
+            existing.NoSPM = model.SPM.NoSPM;
+            existing.TglSPM = model.SPM.TglSPM;
+            existing.Keperluan = model.SPM.Keperluan;
+            existing.CreatedBy = model.SPM.CreatedBy;
+            existing.CreatedDate = model.SPM.CreatedDate;
+            existing.VerifiedBy = model.SPM.VerifiedBy;
+            existing.VerifiedDate = model.SPM.VerifiedDate;
             existing.ApprovedBy = user.Nama;
-            existing.ApprovedDate = model.ApprovedDate;
-            existing.RejectedBy = model.RejectedBy;
-            existing.RejectedDate = model.RejectedDate;
-            existing.Nilai = model.Nilai;
-            existing.DocStatus = model.DocStatus;
+            existing.ApprovedDate = model.SPM.ApprovedDate;
+            existing.RejectedBy = model.SPM.RejectedBy;
+            existing.RejectedDate = model.SPM.RejectedDate;
+            existing.Nilai = model.SPM.Nilai;
+            existing.DocStatus = model.SPM.DocStatus;
+
+            if (model.IsRejected)
+            {
+                existing.RejectedBy = existing.VerifiedBy;
+                existing.RejectedDate = existing.VerifiedDate;
+                existing.AlasanPenolakan = model.SPM.AlasanPenolakan;
+                existing.DocStatus = SD.Rejected;
+            }
 
             _unitOfWork.Save();
 
             _spCall.Execute("Usp_SPM_LOG_Update",
-              new DynamicParameters(new { model.UnitKey, model.NoSPM, Status = SD.Approved }));
+              new DynamicParameters(new { model.SPM.UnitKey, model.SPM.NoSPM, Status = existing.DocStatus }));
 
             return RedirectToAction(nameof(Index));
         }
