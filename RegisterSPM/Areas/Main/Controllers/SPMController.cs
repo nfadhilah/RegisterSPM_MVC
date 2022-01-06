@@ -286,6 +286,61 @@ namespace RegisterSPM.Areas.Main.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var model = await _unitOfWork.SPM.GetAsync(id);
+            if (model == null) return NotFound();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _unitOfWork.ApplicationUser.GetFirstOrDefaultAsync(x => x.Id == userId);
+            model.DocStatus = SD.Rejected;
+            model.RejectedDate = DateTime.UtcNow;
+            model.RejectedBy = user.Nama;
+            return View(new SPMRejectViewModel
+            {
+                SPM = model
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(SPMRejectViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            try
+            {
+                var deleted = await _unitOfWork.SPM.GetAsync(model.SPM.Id);
+
+                var processed = _spCall.OneRecord<LookupSPMViewModel>("Usp_SPM_SP2D_Get_Single",
+                    new DynamicParameters(new { deleted.UnitKey, deleted.NoSPM }));
+
+                if (processed != null)
+                {
+                    model.ErrorMessage = "SPM tidak dapat dibatalkan karena sudah tercatat di SP2D";
+                    return View(model);
+                }
+
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var user = await _unitOfWork.ApplicationUser.GetFirstOrDefaultAsync(x => x.Id == userId);
+                deleted.DocStatus = SD.Rejected;
+                deleted.RejectedBy = user.Nama;
+                deleted.RejectedDate = DateTime.UtcNow;
+                deleted.AlasanPenolakan = model.SPM.AlasanPenolakan;
+                _unitOfWork.Save();
+                _spCall.Execute("Usp_SPM_LOG_Update",
+                    new DynamicParameters(new { deleted.UnitKey, deleted.NoSPM, Status = SD.Rejected }));
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                model.ErrorMessage = "SPM gagal dibatalkan";
+                return View(model);
+            }
+        }
+
+
         #region API CALLS
 
         [HttpGet]
@@ -353,34 +408,34 @@ namespace RegisterSPM.Areas.Main.Controllers
             }
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> Delete(int id)
-        {
-            try
-            {
-                var deleted = await _unitOfWork.SPM.GetAsync(id);
-
-                var processed = _spCall.OneRecord<LookupSPMViewModel>("Usp_SPM_SP2D_Get_Single",
-                    new DynamicParameters(new { deleted.UnitKey, deleted.NoSPM }));
-
-                if (processed != null) return Json(new { success = false, message = "SPM tidak dapat dibatalkan karena sudah tercatat di SP2D" });
-
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var user = await _unitOfWork.ApplicationUser.GetFirstOrDefaultAsync(x => x.Id == userId);
-                deleted.DocStatus = SD.Rejected;
-                deleted.RejectedBy = user.Nama;
-                deleted.RejectedDate = DateTime.UtcNow;
-                _unitOfWork.Save();
-                _spCall.Execute("Usp_SPM_LOG_Update",
-                    new DynamicParameters(new { deleted.UnitKey, deleted.NoSPM, Status = SD.Rejected }));
-                return Json(new { success = true, message = "SPM berhasil dibatalkan" });
-            }
-            catch (Exception)
-            {
-                return Json(new { success = false, message = "SPM gagal dibatalkan" });
-            }
-
-        }
+        // [HttpDelete]
+        // public async Task<IActionResult> Delete(int id)
+        // {
+        //     try
+        //     {
+        //         var deleted = await _unitOfWork.SPM.GetAsync(id);
+        //
+        //         var processed = _spCall.OneRecord<LookupSPMViewModel>("Usp_SPM_SP2D_Get_Single",
+        //             new DynamicParameters(new { deleted.UnitKey, deleted.NoSPM }));
+        //
+        //         if (processed != null) return Json(new { success = false, message = "SPM tidak dapat dibatalkan karena sudah tercatat di SP2D" });
+        //
+        //         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //         var user = await _unitOfWork.ApplicationUser.GetFirstOrDefaultAsync(x => x.Id == userId);
+        //         deleted.DocStatus = SD.Rejected;
+        //         deleted.RejectedBy = user.Nama;
+        //         deleted.RejectedDate = DateTime.UtcNow;
+        //         _unitOfWork.Save();
+        //         _spCall.Execute("Usp_SPM_LOG_Update",
+        //             new DynamicParameters(new { deleted.UnitKey, deleted.NoSPM, Status = SD.Rejected }));
+        //         return Json(new { success = true, message = "SPM berhasil dibatalkan" });
+        //     }
+        //     catch (Exception)
+        //     {
+        //         return Json(new { success = false, message = "SPM gagal dibatalkan" });
+        //     }
+        //
+        // }
 
         #endregion
     }

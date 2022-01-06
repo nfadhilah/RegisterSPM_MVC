@@ -1,40 +1,51 @@
 ﻿@model IEnumerable<RegisterSPM.Models.ViewModels.LookupSPMViewModel>
 @{
-  ViewData["Active"] = "SPM";
+    ViewData["Active"] = "SPM";
 }
 
 <div class="mb-3">
-  <h3 class="h3 d-inline align-middle">Lookup SPM</h3>
-  <h5 class="badge bg-dark text-white ms-2">Daftar pengajuan SPM</h5>
+    <h3 class="h3 d-inline align-middle">Lookup SPM</h3>
+    <h5 class="badge bg-dark text-white ms-2">Daftar pengajuan SPM</h5>
 </div>
 <div class="card">
-  @* <div class="card-header"> *@
-  @*   <div class="d-flex flex-row"> *@
-  @*     <div class="justify-content-end"> *@
-  @*       <a class="btn btn-primary"><i class="align-middle" data-feather="plus"></i> <span class="align-middle">Tambah</span></a> *@
-  @*     </div> *@
-  @*   </div> *@
-  @* </div> *@
-  <div class="card-body">
-    <div class="row">
-      <div class="col-12">
-        <table id="tblData" class="display" width="100%">
-          <thead>
-          <tr>
-            <th>OPD</th>
-            <th>UnitKey</th>
-            <th>No. SPM</th>
-            <th class="text-center">Tgl Pengajuan</th>
-            <th class="text-center">Keperluan</th>
-            <th></th>
-          </tr>
-          </thead>
-        </table>
-      </div>
+    @* <div class="card-header"> *@
+    @*   <div class="d-flex flex-row"> *@
+    @*     <div class="justify-content-end"> *@
+    @*       <a class="btn btn-primary"><i class="align-middle" data-feather="plus"></i> <span class="align-middle">Tambah</span></a> *@
+    @*     </div> *@
+    @*   </div> *@
+    @* </div> *@
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <table id="tblData" class="display" width="100%">
+                    <thead>
+                        <tr>
+                            <th>OPD</th>
+                            <th>UnitKey</th>
+                            <th>No. SPM</th>
+                            <th class="text-center">Tgl Pengajuan</th>
+                            <th class="text-center">Keperluan</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
     </div>
-  </div>
+    <div class="card-footer border-top">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6">
+                        <a asp-action="Index" class="btn btn-primary form-control">Kembali</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
-  <script src="~/js/lookupSpm.js"></script>
+<script src="~/js/lookupSpm.js"></script>
 }

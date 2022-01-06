@@ -49,6 +49,7 @@ function loadDataTable(url) {
             {
                 data: null,
                 render: function (data, type, row) {
+
                     if (canVerify && row.docStatus === 1) {
                         return `
                 <div>
@@ -58,11 +59,12 @@ function loadDataTable(url) {
                   <a href="/Main/SPM/Verify/${row.id}" class="btn btn-warning my-1 mx-1" style="cursor: pointer">
                     <i data-feather="edit"></i> Verifikasi
                   </a>
-                  <a onclick="onDelete('/Main/SPM/Delete/${row.id}')" class="btn btn-danger my-1 mx-1" style="cursor: pointer">
+                  <a href="/Main/SPM/Delete/${row.id}" class="btn btn-danger my-1 mx-1" style="cursor: pointer">
                     <i data-feather="trash"></i> Batal
                   </a>
                 </div>`;
                     }
+
 
                     if (canApprove && row.docStatus === 2) {
                         return `
@@ -73,14 +75,27 @@ function loadDataTable(url) {
                   <a href="/Main/SPM/Approve/${row.id}" class="btn btn-success my-1 mx-1" style="cursor: pointer">
                     <i data-feather="edit"></i> Approve
                   </a>
-                  <a onclick="onDelete('/Main/SPM/Delete/${row.id}')" class="btn btn-danger my-1 mx-1" style="cursor: pointer">
+                  <a href="/Main/SPM/Delete/${row.id}" class="btn btn-danger my-1 mx-1" style="cursor: pointer">
                     <i data-feather="trash"></i> Batal
                   </a>
                 </div>
                 `;
                     }
 
-                    if (row.docStatus === 4) {
+                    if (canApprove && row.docStatus === 3) {
+                        return `
+                <div>
+                  <a href="/Main/SPM/Detail/${row.id}" class="btn btn-primary my-1 mx-1" style="cursor: pointer">
+                    <i data-feather="eye"></i> Detil
+                  </a>
+                  <a href="/Main/SPM/Delete/${row.id}" class="btn btn-danger my-1 mx-1" style="cursor: pointer">
+                    <i data-feather="trash"></i> Batal
+                  </a>
+                </div>
+                `;
+                    }
+
+                    if (canAdd && row.docStatus === 4) {
                         return `
                 <div>
                   <a href="/Main/SPM/Detail/${row.id}" class="btn btn-primary my-1 mx-1" style="cursor: pointer">
@@ -97,9 +112,6 @@ function loadDataTable(url) {
                 <div>
                   <a href="/Main/SPM/Detail/${row.id}" class="btn btn-primary my-1 mx-1" style="cursor: pointer">
                     <i data-feather="eye"></i> Detil
-                  </a>
-                  <a onclick="onDelete('/Main/SPM/Delete/${row.id}')" class="btn btn-danger my-1 mx-1" style="cursor: pointer">
-                    <i data-feather="trash"></i> Batal
                   </a>
                 </div>
 `;

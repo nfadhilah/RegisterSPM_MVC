@@ -45,11 +45,11 @@
                 Context.Response.Redirect("?status=1");
                 break;
             case SD.RoleVerifikator:
-                verified = "active";
-                Context.Response.Redirect("?status=2");
+                registered = "active";
+                Context.Response.Redirect("?status=1");
                 break;
             case SD.RoleApprover:
-                approved = "active";
+                registered = "active";
                 Context.Response.Redirect("?status=2");
                 break;
         }
@@ -108,6 +108,7 @@
 
 @section Scripts {
 <script>
+    var canAdd = @(User.IsInRole(SD.RoleAdmin) || User.IsInRole(SD.RoleSA) || User.IsInRole(SD.RoleRegistrator) ? "true" : "false");
     var canVerify = @(User.IsInRole(SD.RoleAdmin) || User.IsInRole(SD.RoleSA) || User.IsInRole(SD.RoleVerifikator) ? "true" : "false");
     var canApprove = @(User.IsInRole(SD.RoleAdmin) || User.IsInRole(SD.RoleSA) || User.IsInRole(SD.RoleApprover) ? "true" : "false");
 </script>
@@ -119,41 +120,41 @@
     modal = new bootstrap.Modal(appModal);
 
     function showModal() {
-      $.ajax({
-        url: "/Main/SPM/GetForm",
-        success: function(res) {
-          $(".modal-title").html("Test");
-          $(".modal-body").html(res);
-          $("#btnModalSubmit").attr("form", "spm-form");
-          modal.show();
-        }
-      });
+        $.ajax({
+            url: "/Main/SPM/GetForm",
+            success: function(res) {
+                $(".modal-title").html("Test");
+                $(".modal-body").html(res);
+                $("#btnModalSubmit").attr("form", "spm-form");
+                modal.show();
+            }
+        });
     }
 
     function handleFormSubmit(form) {
-      $.ajax({
-        type: "POST",
-        url: form.action,
-        data: new FormData(form),
-        contentType: false,
-        processData: false,
-        success: function(res) {
-          if (!res.isValid) {
-            $(".modal-body").html(res.html);
-          } else {
-            modal.hide();
-            return true;
-          }
-        },
-        error: function(res) {
-          console.log(res);
-        }
-      });
-      return false;
+        $.ajax({
+            type: "POST",
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function(res) {
+                if (!res.isValid) {
+                    $(".modal-body").html(res.html);
+                } else {
+                    modal.hide();
+                    return true;
+                }
+            },
+            error: function(res) {
+                console.log(res);
+            }
+        });
+        return false;
     }
 
     function onCancel() {
-      modal.hide();
+        modal.hide();
     }
 </script>
 }
