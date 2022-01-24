@@ -309,6 +309,12 @@ namespace RegisterSPM.Areas.Main.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
+            if (string.IsNullOrWhiteSpace(model.SPM.AlasanPenolakan))
+            {
+                model.ErrorMessage = "Error: Alasan Penolakan harus diisi.";
+                return View(model);
+            }
+
             try
             {
                 var deleted = await _unitOfWork.SPM.GetAsync(model.SPM.Id);
@@ -318,7 +324,7 @@ namespace RegisterSPM.Areas.Main.Controllers
 
                 if (processed != null)
                 {
-                    model.ErrorMessage = "SPM tidak dapat dibatalkan karena sudah tercatat di SP2D";
+                    model.ErrorMessage = "Error: SPM gagal dibatalkan karena sudah tercatat di SP2D";
                     return View(model);
                 }
 
@@ -335,7 +341,7 @@ namespace RegisterSPM.Areas.Main.Controllers
             }
             catch (Exception)
             {
-                model.ErrorMessage = "SPM gagal dibatalkan";
+                model.ErrorMessage = "Error: SPM gagal dibatalkan";
                 return View(model);
             }
         }
