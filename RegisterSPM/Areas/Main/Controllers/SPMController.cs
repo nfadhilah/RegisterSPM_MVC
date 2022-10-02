@@ -369,7 +369,7 @@ namespace RegisterSPM.Areas.Main.Controllers
                     result = await _unitOfWork.SPM.GetAllAsync(x => x.DocStatus == SD.Rejected);
                     break;
                 default:
-                    result = await _unitOfWork.SPM.GetAllAsync(x => x.DocStatus == SD.Registered, orderBy: s => s.OrderByDescending(x => x.Id));
+                    result = await _unitOfWork.SPM.GetAllAsync();
                     break;
             }
 
