@@ -13,7 +13,7 @@
   <div class="col-12 col-lg-6">
     <div class="card">
       <div class="card-body">
-        <form method="post">
+        <form method="post" id="#add">
           <div asp-validation-summary="All"></div>
           <input type="hidden" asp-for="Id"/>
           <input type="hidden" asp-for="DocStatus"/>
@@ -45,7 +45,7 @@
           </div>
           <div class="form-group my-2">
             <label asp-for="CreatedDate"></label>
-            <input type="text" asp-for="CreatedDate" class="form-control" readonly />
+            <input type="text" id="date-picker" asp-for="CreatedDate" value="@Model.CreatedDate.Value.ToShortDateString()" class="form-control" />
             <span asp-validation-for="CreatedDate" class="text-danger"></span>
           </div>
           <div class="my-2">
@@ -61,7 +61,10 @@
 {
   <partial name="_ValidationScriptsPartial"/>
   <script>
-
-    $("#datepicker").datepicker();
+      $(function() {
+          $("#date-picker").datepicker({
+              dateFormat: 'dd/mm/yy'
+          });
+      });
   </script>
 }
